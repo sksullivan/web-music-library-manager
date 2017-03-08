@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { YoutubeResult } from './models/youtube-result.model';
+import { YoutubeSearchResults } from './models/youtube-search-results.model';
 
 export const ActionTypes = {
   SEARCH:           'Search',
@@ -16,8 +16,9 @@ export class SearchAction implements Action {
 export class SearchCompleteAction implements Action {
   type = ActionTypes.SEARCH_COMPLETE;
 
-  constructor(public payload: [YoutubeResult]) { }
+  constructor(public payload: YoutubeSearchResults) { }
 }
 
 export type Actions
   = SearchAction
+  | SearchCompleteAction

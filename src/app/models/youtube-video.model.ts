@@ -1,1 +1,3 @@
-youtube-video.model.ts
+export class YoutubeVideo {
+	etag: string;
+}

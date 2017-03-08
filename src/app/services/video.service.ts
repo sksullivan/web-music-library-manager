@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
 import 'rxjs/add/operator/map';
 
+import { YoutubeSearchResults } from '../models/youtube-search-results.model';
+
 
 @Injectable()
 export class VideoService {
@@ -15,6 +17,8 @@ export class VideoService {
           '&maxResults=50' +
           '&type=video' +
           '&key=AIzaSyAARhzDEdAwaIYKelgTmVa8Nez5sLKjBcM')
-      .map(response => response.json())
+      .map(response => {
+        return new YoutubeSearchResults(response.json());
+      })
   }
 }

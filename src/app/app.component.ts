@@ -19,12 +19,10 @@ import '../assets/css/styles.css';
 
 @Injectable()
 export class AppComponent {
-	private searchResults = [1,2,3,4];
 
 	constructor(private videoService: VideoService, private store: Store<fromRoot.State>) { }
 
 	search(query: string) {
-		this.store.dispatch(new app.SearchAction("hello world"));
-		this.videoService.fetchVideos(query).subscribe(data => console.log(data));
+		this.videoService.fetchVideos(query).subscribe(searchResults => this.store.dispatch(new app.SearchCompleteAction(searchResults)));
 	}
 }

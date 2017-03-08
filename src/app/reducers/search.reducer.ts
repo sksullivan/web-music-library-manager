@@ -1,30 +1,26 @@
 import * as app from '../app.actions';
+import { YoutubeSearchResults } from '../models/youtube-search-results.model';
+import { YoutubeVideo } from '../models/youtube-video.model';
 
 export interface State {
   searchQuery: string;
+  searchResults: YoutubeSearchResults;
   loading: boolean;
 };
 
 const initialState: State = {
   searchQuery: "",
+  searchResults: new YoutubeSearchResults(),
   loading: false
 };
 
 export function reducer(state = initialState, action: app.Actions): State {
   switch (action.type) {
-    case app.ActionTypes.SEARCH: {
-      const searchQuery = action.payload;
-
-      if (searchQuery === '') {
-        return {
-          searchQuery,
-          loading: false,
-        };
-      }
+    case app.ActionTypes.SEARCH_COMPLETE: {
 
       return Object.assign({}, state, {
-        searchQuery,
-        loading: true
+        searchResults: action.payload,
+        loading: false
       });
     }
 

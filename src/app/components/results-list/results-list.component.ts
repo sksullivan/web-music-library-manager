@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-//import { ResultModel } from '../result/result.model.ts'
+import { YoutubeVideo } from '../../models/youtube-video.model';
 
 
 @Component({
@@ -9,5 +9,5 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./results-list.component.css']
 })
 export class ResultsListComponent {
-	@Input() results: [any];
+	@Input() results: [YoutubeVideo];
 }

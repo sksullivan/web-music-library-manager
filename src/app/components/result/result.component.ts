@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { YoutubeVideo } from '../../models/youtube-video.model';
+
 
 @Component({
   selector: 'result',
@@ -7,5 +9,5 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./result.component.css']
 })
 export class ResultComponent {
-
+	@Input() video: YoutubeVideo;
 }
