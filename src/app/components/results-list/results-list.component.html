@@ -1,5 +1,10 @@
-<ul>
-	<li *ngFor="let video of searchResults">
-		<result [video]="video"></result>
-	</li>
-</ul>
+<div *ngIf="loading">
+	<i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+</div>
+<div *ngIf="!loading">
+	<ul>
+		<li *ngFor="let video of results.items">
+			<result [video]="video"></result>
+		</li>
+	</ul>
+</div>

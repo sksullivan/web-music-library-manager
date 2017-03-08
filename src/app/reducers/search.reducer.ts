@@ -24,6 +24,14 @@ export function reducer(state = initialState, action: app.Actions): State {
       });
     }
 
+    case app.ActionTypes.SEARCH: {
+
+      return Object.assign({}, state, {
+        searchQuery: action.payload,
+        loading: true
+      });
+    }
+
     default: {
       return state;
     }

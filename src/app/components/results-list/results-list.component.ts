@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { YoutubeVideo } from '../../models/youtube-video.model';
+import { YoutubeSearchResults } from '../../models/youtube-search-results.model';
 
 
 @Component({
@@ -9,5 +9,6 @@ import { YoutubeVideo } from '../../models/youtube-video.model';
   styleUrls: ['./results-list.component.css']
 })
 export class ResultsListComponent {
-	@Input() results: [YoutubeVideo];
+	@Input() results: YoutubeSearchResults;
+	@Input() loading: boolean;
 }

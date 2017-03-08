@@ -1,21 +1,21 @@
 import { YoutubeVideo } from './youtube-video.model';
+import { YoutubeObject } from './youtube-object.model';
 
 
-export class YoutubeSearchResults {
+export class YoutubeSearchResults implements YoutubeObject {
 	etag: string;
 	items: [YoutubeVideo];
 	nextPageToken: string;
 	resultsPerPage: number;
 	totalResults: number;
 
-	constructor(jsonObject: any) {
-		console.log(jsonObject)
-		if (jsonObject) {
-			this.etag = jsonObject.etag;
-			this.items = jsonObject.items;
-			this.nextPageToken = jsonObject.nextPageToken;
-			this.resultsPerPage = jsonObject.pageInfo.resultsPerPage;
-			this.totalResults = jsonObject.pageInfo.totalResults;
+	constructor(jsonResults?: any) {
+		if (jsonResults !== undefined) {
+			this.etag = jsonResults.etag;
+			this.items = jsonResults.items.map((jsonVideo?: any) => new YoutubeVideo(jsonVideo));
+			this.nextPageToken = jsonResults.nextPageToken;
+			this.resultsPerPage = jsonResults.pageInfo.resultsPerPage;
+			this.totalResults = jsonResults.pageInfo.totalResults;
 		} else {
 			this.items = <[YoutubeVideo]>[];
 		}

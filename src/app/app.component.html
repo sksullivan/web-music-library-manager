@@ -1,4 +1,4 @@
 <main>
   <search (onSearch)="search($event)"></search>
-  <results-list [results]="searchResults"></results-list>
+  <results-list [loading]="loading" [results]="searchResults"></results-list>
 </main>
