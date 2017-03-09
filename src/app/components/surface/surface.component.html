@@ -6,6 +6,10 @@
 			[style.height.px]="cellHeight"
 			[@displayCells]="shouldDisplay"
 			(click)="onClick()">
+			<i class="fa fa-plus" aria-hidden="true"
+				[style.margin-top.px]="this.cellHeight/2-25"
+				[@displayCellHelperIcons]="shouldDisplay"
+				></i>
 		</li>
 	</ul>
 	<ul>

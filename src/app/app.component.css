@@ -8,7 +8,7 @@ span {
 
 tray {
 	position: fixed;
-	bottom: 0px;
+	bottom: 10px;
 	width: 90%;
     line-height: 75px;
     left: 5%;

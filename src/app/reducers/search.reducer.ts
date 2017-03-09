@@ -18,7 +18,7 @@ const initialState: State = {
   loading: false,
   surfaceLayout: new SurfaceLayout([
     new Tile(0,0,1,1),
-    new Tile(1,0,3,2),
+    new Tile(1,1,2,2),
   ]),
   trayItems: [
     new TrayItem("search","",""),

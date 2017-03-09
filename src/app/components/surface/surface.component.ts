@@ -5,41 +5,55 @@ import { SurfaceLayout, Tile } from '../../models/surface-layout.model';
 
 
 @Component({
-  selector: 'surface',
-  templateUrl: './surface.component.html',
-  styleUrls: ['./surface.component.css'],
-  animations: [
-	trigger('displayCells', [
-		state('false', style({
-			paddingLeft: '15px',
-			paddingRight: '15px',
-			paddingTop: '15px',
-			paddingBottom: '15px',
-			marginLeft: '0px',
-			marginRight: '0px',
-			marginTop: '0px',
-			marginBottom: '0px',
-			borderRadius: '0px',
-		})),
-		state('true', style({
-			paddingLeft: '0px',
-			paddingRight: '0px',
-			paddingTop: '0px',
-			paddingBottom: '0px',
-			marginLeft: '15px',
-			marginRight: '15px',
-			marginTop: '15px',
-			marginBottom: '15px',
-			borderRadius: '35px',
-		})),
-		transition('false => true', animate('100ms ease')),
-		transition('true => false', animate('100ms ease'))
-		])
-   ],
+	selector: 'surface',
+	templateUrl: './surface.component.html',
+	styleUrls: ['./surface.component.css'],
+	animations: [
+		trigger('displayCells', [
+			state('false', style({
+				paddingLeft: '15px',
+				paddingRight: '15px',
+				paddingTop: '15px',
+				paddingBottom: '15px',
+				marginLeft: '0px',
+				marginRight: '0px',
+				marginTop: '0px',
+				marginBottom: '0px',
+				borderRadius: '0px',
+				border: '3px #56494e solid',
+				backgroundColor: '#56494e',
+			})),
+			state('true', style({
+				paddingLeft: '0px',
+				paddingRight: '0px',
+				paddingTop: '0px',
+				paddingBottom: '0px',
+				marginLeft: '15px',
+				marginRight: '15px',
+				marginTop: '15px',
+				marginBottom: '15px',
+				borderRadius: '35px',
+				border: '3px #a29c9b dashed',
+				backgroundColor: '#56494e',
+			})),
+			transition('false => true', animate('300ms ease-in-out')),
+			transition('true => false', animate('300ms ease-in-out'))
+		]),
+		trigger('displayCellHelperIcons', [
+			state('false', style({
+				opacity: '0.0',
+			})),
+			state('true', style({
+				opacity: '1.0',
+			})),
+			transition('false => true', animate('300ms ease-in-out')),
+			transition('true => false', animate('300ms ease-in-out'))
+		]),
+	]
 })
 export class SurfaceComponent {
 	private NUM_COLS = 6;
-	private CELL_PADDING = 15;
+	private CELL_PADDING = 18;
 
 	@Input() surfaceDisplayStream: Subject<boolean>;
 	@Input() surfaceLayout: SurfaceLayout;
