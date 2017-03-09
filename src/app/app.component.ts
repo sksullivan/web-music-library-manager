@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, NgZone } from '@angular/core';
 import { Http } from "@angular/http";
 
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -10,7 +10,7 @@ import * as fromRoot from './reducers/search.reducer';
 import * as app from './app.actions';
 import { YoutubeSearchResults } from './models/youtube-search-results.model';
 import { TrayItem } from './models/tray-item.model';
-import { SurfaceLayout, Tile } from './models/surface-layout.model';
+import { Point, SurfaceLayout, Tile } from './models/surface-layout.model';
 
 import '../assets/css/styles.css';
 
@@ -33,23 +33,30 @@ export class AppComponent {
 	private placingTrayItem: TrayItem;
 	private surfaceDisplayStream = new Subject<boolean>();
 	private trayItems: TrayItem[];
+	private mouseLocation = new Point(0,0);
 
-	constructor(private videoService: VideoService, private store: Store<fromRoot.State>) {
-		store.select('searchResults').subscribe((results: YoutubeSearchResults) => { this.searchResults = results });
-		store.select('loading').subscribe((loading: boolean) => { this.loading = loading });
-		store.select('surfaceLayout').subscribe((surfaceLayout: SurfaceLayout) => { this.surfaceLayout = surfaceLayout });
-		store.select('placingTrayItem').subscribe((trayItem: TrayItem) => {
+	constructor(private videoService: VideoService, private store: Store<fromRoot.State>, zone: NgZone) {
+		this.registerStoreListeners();
+		this.registerStreamListeners();
+
+		document.onmousemove = (e: MouseEvent) => 
+			zone.run(() => this.mouseLocation = new Point(e.clientX,e.clientY));
+	}
+
+	registerStoreListeners() {
+		this.store.select('searchResults').subscribe((results: YoutubeSearchResults) => { this.searchResults = results });
+		this.store.select('loading').subscribe((loading: boolean) => { this.loading = loading });
+		this.store.select('surfaceLayout').subscribe((surfaceLayout: SurfaceLayout) => { this.surfaceLayout = surfaceLayout });
+		this.store.select('placingTrayItem').subscribe((trayItem: TrayItem) => {
 			this.placingTrayItem = trayItem;
-			if (trayItem == undefined) {
-				this.surfaceDisplayStream.next(false);
-			} else {
-				this.surfaceDisplayStream.next(true);
-			}
+			this.surfaceDisplayStream.next(true);
 		});
-		store.select('trayItems').subscribe((trayItems: TrayItem[]) => {
+		this.store.select('trayItems').subscribe((trayItems: TrayItem[]) => {
 			this.trayItems = trayItems;
 		});
+	}
 
+	registerStreamListeners() {
 		this.searchStream
 			.debounceTime(40)
 			.filter(search => search.length > 1)
@@ -66,5 +73,11 @@ export class AppComponent {
 			});
 		this.traySelectionStream
 			.subscribe(trayItem => this.store.dispatch(new app.PlaceTrayItemAction(trayItem)));
+		this.surfaceDisplayStream
+			.subscribe((status: boolean) => {
+				if (!status) {
+					// this.store.dispatch(new app.PlaceTrayItemCompleteAction());
+				}
+			});
 	}
 }

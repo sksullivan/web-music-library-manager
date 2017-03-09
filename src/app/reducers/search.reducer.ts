@@ -21,9 +21,9 @@ const initialState: State = {
     new Tile(1,1,2,2),
   ]),
   trayItems: [
-    new TrayItem("search","",""),
-    new TrayItem("playback","",""),
-    new TrayItem("disc","",""),
+    new TrayItem("search","","fa-search"),
+    new TrayItem("playback","","fa-youtube-play"),
+    new TrayItem("decks","","💿"),
   ],
 };
 

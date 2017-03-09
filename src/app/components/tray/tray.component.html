@@ -1,8 +1,10 @@
 <div>
 	<span>layout</span>
 	<ul>
-		<li *ngFor="let item of items" (click)="onClick($event)">
-			<!-- <i [ngClass]="item.iconName" class="fa" aria-hidden="true"></i> -->{{ item.name }}
+		<li *ngFor="let item of items">
+			<tray-item [item]="item"
+				[selectionStream]="selectionStream">
+			</tray-item>
 		</li>
 	</ul>
 </div>

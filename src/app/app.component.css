@@ -13,3 +13,9 @@ tray {
     line-height: 75px;
     left: 5%;
 }
+
+tray-item {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+}

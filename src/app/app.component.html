@@ -1,10 +1,15 @@
 <main>
-  <div class="row">
-    <div class="col-md-12">
-      <surface [surfaceDisplayStream]="surfaceDisplayStream" [surfaceLayout]="surfaceLayout"></surface>
-      <!-- <search [valueStream]="searchStream"></search>
-      <results-list [loading]="loading" [results]="searchResults"></results-list> -->
-    </div>
-  </div>
-  <tray [items]="trayItems" [selectionStream]="traySelectionStream"></tray>
+	<div class="row">
+		<div class="col-md-12">
+			<surface [surfaceDisplayStream]="surfaceDisplayStream" [surfaceLayout]="surfaceLayout"></surface>
+			<!-- <search [valueStream]="searchStream"></search>
+			<results-list [loading]="loading" [results]="searchResults"></results-list> -->
+		</div>
+ 	</div>
+ 	<tray [items]="trayItems" [selectionStream]="traySelectionStream"></tray>
+	<tray-item *ngIf="placingTrayItem" 
+		[item]="placingTrayItem"
+		[style.left.px]="mouseLocation.x"	
+		[style.top.px]="mouseLocation.y">
+	</tray-item>
 </main>

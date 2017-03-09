@@ -12,8 +12,4 @@ import { TrayItem } from '../../models/tray-item.model';
 export class TrayComponent {
 	@Input() items: [TrayItem];
 	@Input() selectionStream: Subject<TrayItem>;
-
-	onClick(e: MouseEvent) {
-		this.selectionStream.next(new TrayItem(e.target.innerText,"",""));
-	}
 }

@@ -8,7 +8,7 @@ ul {
 }
 
 li {
-	background-color: #a29c9b;
+	background-color: #56494e;
 	float: left;
 	margin: 15px;
 	border-radius: 35px;
@@ -18,7 +18,7 @@ li {
 
 li.tile {
 	position: fixed;
-	/*background-color: rgba(255,255,255,0.5);*/
+	background-color: #a29c9b;
 }
 
 li .fa {
@@ -27,4 +27,5 @@ li .fa {
 	height: 100%;
 	font-size: 50px;
 	transition: all 0.1s ease-in-out;
+	opacity: 0.0;
 }

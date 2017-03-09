@@ -9,6 +9,7 @@ import { SearchComponent } from './components/search/search.component';
 import { ResultsListComponent } from './components/results-list/results-list.component';
 import { ResultComponent } from './components/result/result.component';
 import { TrayComponent } from './components/tray/tray.component';
+import { TrayItemComponent } from './components/tray-item/tray-item.component';
 import { SurfaceComponent } from './components/surface/surface.component';
 
 import { VideoService } from './services/video.service';
@@ -28,6 +29,7 @@ import { reducer } from './reducers/search.reducer';
     ResultsListComponent,
     ResultComponent,
     TrayComponent,
+    TrayItemComponent,
     SurfaceComponent,
   ],
   bootstrap: [ AppComponent ]
