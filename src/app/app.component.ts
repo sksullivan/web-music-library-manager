@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from './reducers/search.reducer';
 import * as app from './app.actions';
 import { YoutubeSearchResults } from './models/youtube-search-results.model';
+import { TrayItem } from './models/tray-item.model';
 
 import '../assets/css/styles.css';
 
@@ -26,6 +27,11 @@ export class AppComponent {
 	private loading: boolean;
 	private searchResultsSubscription: any;
 	private searchStream = new BehaviorSubject<string>("");
+	private trayItems = [
+		new TrayItem("search","",""),
+		new TrayItem("playback","",""),
+		new TrayItem("disc","",""),
+	];
 
 	constructor(private videoService: VideoService, private store: Store<fromRoot.State>) {
 		store.select('searchResults').subscribe((results: YoutubeSearchResults) => { this.searchResults = results });

@@ -1,10 +1,16 @@
 main {
   margin: 1em;
-  /*text-align: center;*/
-  /*margin-top: 50px;*/
   display: block;
 }
 
 span {
   font-size: 24px;
+}
+
+tray {
+	position: fixed;
+	bottom: 0px;
+	width: 90%;
+    line-height: 75px;
+    left: 5%;
 }

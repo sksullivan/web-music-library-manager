@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { SearchComponent } from './components/search/search.component';
 import { ResultsListComponent } from './components/results-list/results-list.component';
 import { ResultComponent } from './components/result/result.component';
+import { TrayComponent } from './components/tray/tray.component';
 
 import { VideoService } from './services/video.service';
 
@@ -24,7 +25,8 @@ import { reducer } from './reducers/search.reducer';
     AppComponent,
     SearchComponent,
     ResultsListComponent,
-    ResultComponent
+    ResultComponent,
+    TrayComponent
   ],
   bootstrap: [ AppComponent ]
 })
