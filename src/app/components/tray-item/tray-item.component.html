@@ -1,0 +1,11 @@
+<div (click)="onClick()">
+	<i class="fa" 
+		[ngClass]="item.iconName"
+		*ngIf="item.iconName">
+	</i>
+	<i class="fa"
+		*ngIf="item.icon">
+		{{ item.icon }}
+	</i>
+	{{ item.name }}
+</div>
