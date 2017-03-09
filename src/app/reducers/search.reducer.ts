@@ -26,6 +26,10 @@ export function reducer(state = initialState, action: app.Actions): State {
 
     case app.ActionTypes.SEARCH: {
 
+      if (action.payload === undefined || action.payload == "") {
+        return state;
+      }
+
       return Object.assign({}, state, {
         searchQuery: action.payload,
         loading: true

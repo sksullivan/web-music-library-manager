@@ -1,3 +1,5 @@
+import { BehaviorSubject } from 'rxjs';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { VideoService } from '../../services/video.service';
 
@@ -8,10 +10,10 @@ import { VideoService } from '../../services/video.service';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent {
-	private query: string;
-	@Output() onSearch = new EventEmitter<string>()
+	private value: string;
+	@Input() valueStream: BehaviorSubject<string>;
 
-	search() {
-		this.onSearch.emit(this.query)
+	valueChanged(newValue: string) {
+		this.valueStream.next(newValue);
 	}
 }
