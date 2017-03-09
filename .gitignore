@@ -10,3 +10,11 @@ typings
 
 .vscode
 .idea
+
+component.js
+model.js
+actions.js
+modules.js
+service.js
+
+.map.js

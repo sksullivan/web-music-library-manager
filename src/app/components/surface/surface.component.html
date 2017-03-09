@@ -1,0 +1,19 @@
+<!-- <div *ngIf="shouldDisplay"> -->
+<div>
+	<ul>
+		<li *ngFor="let cell of cells"
+			[style.width.px]="cellWidth"
+			[style.height.px]="cellHeight"
+			[@displayCells]="shouldDisplay"
+			(click)="onClick()">
+		</li>
+	</ul>
+	<ul>
+		<li class="tile" *ngFor="let tile of surfaceLayout.tiles"
+			[style.width.px]="tile.relativeExtent.x*(this.cellWidth+2*this.CELL_PADDING)-2*this.CELL_PADDING"
+			[style.height.px]="tile.relativeExtent.y*(this.cellHeight+2*this.CELL_PADDING)-2*this.CELL_PADDING"
+			[style.left.px]="tile.origin.x*(this.cellWidth+2*this.CELL_PADDING)"
+			[style.top.px]="tile.origin.y*(this.cellHeight+2*this.CELL_PADDING)">
+		</li>
+	</ul>
+</div>

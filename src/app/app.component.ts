@@ -1,7 +1,7 @@
 import { Component, Injectable } from '@angular/core';
 import { Http } from "@angular/http";
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { VideoService } from './services/video.service';
 
@@ -10,6 +10,7 @@ import * as fromRoot from './reducers/search.reducer';
 import * as app from './app.actions';
 import { YoutubeSearchResults } from './models/youtube-search-results.model';
 import { TrayItem } from './models/tray-item.model';
+import { SurfaceLayout, Tile } from './models/surface-layout.model';
 
 import '../assets/css/styles.css';
 
@@ -27,15 +28,28 @@ export class AppComponent {
 	private loading: boolean;
 	private searchResultsSubscription: any;
 	private searchStream = new BehaviorSubject<string>("");
-	private trayItems = [
-		new TrayItem("search","",""),
-		new TrayItem("playback","",""),
-		new TrayItem("disc","",""),
-	];
+	private surfaceLayout: SurfaceLayout;
+	private traySelectionStream = new Subject<TrayItem>();
+	private placingTrayItem: TrayItem;
+	private surfaceDisplayStream = new Subject<boolean>();
+	private trayItems: TrayItem[];
 
 	constructor(private videoService: VideoService, private store: Store<fromRoot.State>) {
 		store.select('searchResults').subscribe((results: YoutubeSearchResults) => { this.searchResults = results });
 		store.select('loading').subscribe((loading: boolean) => { this.loading = loading });
+		store.select('surfaceLayout').subscribe((surfaceLayout: SurfaceLayout) => { this.surfaceLayout = surfaceLayout });
+		store.select('placingTrayItem').subscribe((trayItem: TrayItem) => {
+			this.placingTrayItem = trayItem;
+			if (trayItem == undefined) {
+				this.surfaceDisplayStream.next(false);
+			} else {
+				this.surfaceDisplayStream.next(true);
+			}
+		});
+		store.select('trayItems').subscribe((trayItems: TrayItem[]) => {
+			this.trayItems = trayItems;
+		});
+
 		this.searchStream
 			.debounceTime(40)
 			.filter(search => search.length > 1)
@@ -50,5 +64,7 @@ export class AppComponent {
 					this.store.dispatch(new app.SearchCompleteAction(new YoutubeSearchResults()));
 				}
 			});
+		this.traySelectionStream
+			.subscribe(trayItem => this.store.dispatch(new app.PlaceTrayItemAction(trayItem)));
 	}
 }

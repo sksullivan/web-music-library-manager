@@ -1,5 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
-
+import { Subject } from 'rxjs';
 import { Component, Input } from '@angular/core';
 
 import { TrayItem } from '../../models/tray-item.model';
@@ -12,9 +11,9 @@ import { TrayItem } from '../../models/tray-item.model';
 })
 export class TrayComponent {
 	@Input() items: [TrayItem];
-	@Input() selectionStream: BehaviorSubject<string>;
+	@Input() selectionStream: Subject<TrayItem>;
 
-	// valueChanged(newValue: string) {
-	// 	this.valueStream.next(newValue);
-	// }
+	onClick(e: MouseEvent) {
+		this.selectionStream.next(new TrayItem(e.target.innerText,"",""));
+	}
 }

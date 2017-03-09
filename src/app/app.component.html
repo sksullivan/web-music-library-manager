@@ -1,12 +1,10 @@
 <main>
   <div class="row">
-    <div class="col-md-4">
-      <search [valueStream]="searchStream"></search>
-      <results-list [loading]="loading" [results]="searchResults"></results-list>
-    </div>
-    <div class="col-md-4">
-      <!-- <playback></playback> -->
+    <div class="col-md-12">
+      <surface [surfaceDisplayStream]="surfaceDisplayStream" [surfaceLayout]="surfaceLayout"></surface>
+      <!-- <search [valueStream]="searchStream"></search>
+      <results-list [loading]="loading" [results]="searchResults"></results-list> -->
     </div>
   </div>
-  <tray [items]="trayItems"></tray>
+  <tray [items]="trayItems" [selectionStream]="traySelectionStream"></tray>
 </main>
