@@ -31,11 +31,18 @@ export class AppComponent {
 		store.select('searchResults').subscribe((results: YoutubeSearchResults) => { this.searchResults = results });
 		store.select('loading').subscribe((loading: boolean) => { this.loading = loading });
 		this.searchStream
+			.debounceTime(40)
 			.filter(search => search.length > 1)
 			.subscribe(search => {
 				this.store.dispatch(new app.SearchAction(search))
 				this.videoService.fetchVideos(search)
 					.subscribe(searchResults => this.store.dispatch(new app.SearchCompleteAction(searchResults)));
+			});
+		this.searchStream.delay(300)
+			.subscribe(search => {
+				if (search == "") {
+					this.store.dispatch(new app.SearchCompleteAction(new YoutubeSearchResults()));
+				}
 			});
 	}
 }

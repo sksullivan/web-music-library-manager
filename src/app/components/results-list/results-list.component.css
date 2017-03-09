@@ -6,7 +6,9 @@ ul {
 
 li {
 	width: 50%;
-	border: solid #a29c9b 1px;
-	padding: 1em;
-	margin-top: 1em;
+	margin-top: 4px;
+}
+li:hover {
+	background-color: #a29c9b;
+	color: #56494e;
 }
