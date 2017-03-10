@@ -1,4 +1,5 @@
 div {
+	pointer-events: none;
 	background-color: #56494e;
 	border: 1px #a29c9b solid;
 	margin-top: 10px;
@@ -21,6 +22,7 @@ div:hover {
 }
 
 i {
+	pointer-events: none;
 	font-size: 24px;
 	line-height: 55px;
 }

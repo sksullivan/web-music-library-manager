@@ -11,9 +11,4 @@ import { TrayItem } from '../../models/tray-item.model';
 })
 export class TrayItemComponent {
 	@Input() item: TrayItem;
-	@Input() selectionStream: Subject<TrayItem>;
-
-	onClick() {
-		this.selectionStream.next(this.item);
-	}
 }

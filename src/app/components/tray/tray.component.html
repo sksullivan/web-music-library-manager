@@ -1,10 +1,10 @@
 <div>
 	<span>layout</span>
 	<ul>
-		<li *ngFor="let item of items">
-			<tray-item [item]="item"
-				[selectionStream]="selectionStream">
-			</tray-item>
+		<li *ngFor="let item of items; let i = index"
+			[attr.data-index]="i"
+			(mousedown)="onMouseDown($event)">
+			<tray-item [item]="item"></tray-item>
 		</li>
 	</ul>
 </div>

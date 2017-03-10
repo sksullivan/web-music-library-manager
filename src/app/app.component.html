@@ -1,12 +1,22 @@
 <main>
 	<div class="row">
 		<div class="col-md-12">
-			<surface [surfaceDisplayStream]="surfaceDisplayStream" [surfaceLayout]="surfaceLayout"></surface>
+			<grid
+				[clickStream]="gridClickStream"
+				[items]="gridTiles"
+				[cellSize]="gridSize"
+				[shouldDisplay]="draggingFromTray">
+			</grid>
+			<surface
+				[clickStream]="tilesClickStream"
+				[items]="surfaceTiles"
+				[cellSize]="gridSize">
+			</surface>
 			<!-- <search [valueStream]="searchStream"></search>
 			<results-list [loading]="loading" [results]="searchResults"></results-list> -->
 		</div>
  	</div>
- 	<tray [items]="trayItems" [selectionStream]="traySelectionStream"></tray>
+ 	<tray [items]="trayItems" [clickStream]="trayClickStream"></tray>
 	<tray-item *ngIf="placingTrayItem" 
 		[item]="placingTrayItem"
 		[style.left.px]="mouseLocation.x"	

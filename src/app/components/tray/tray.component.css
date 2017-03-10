@@ -21,3 +21,7 @@ ul {
 li {
   float: right;
 }
+
+tray-item {
+  pointer-events: none;
+}

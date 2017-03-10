@@ -11,8 +11,10 @@ import { ResultComponent } from './components/result/result.component';
 import { TrayComponent } from './components/tray/tray.component';
 import { TrayItemComponent } from './components/tray-item/tray-item.component';
 import { SurfaceComponent } from './components/surface/surface.component';
+import { GridComponent } from './components/grid/grid.component';
 
 import { VideoService } from './services/video.service';
+import { DragService } from './services/drag/drag.service';
 
 import { reducer } from './reducers/search.reducer';
 
@@ -31,6 +33,7 @@ import { reducer } from './reducers/search.reducer';
     TrayComponent,
     TrayItemComponent,
     SurfaceComponent,
+    GridComponent,
   ],
   bootstrap: [ AppComponent ]
 })

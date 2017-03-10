@@ -1,16 +1,16 @@
 import { Component, Input, trigger, state, style, transition, animate } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Point, Tile } from '../../models/surface-layout.model';
-import { DragSource, DragTarget } from '../../services/drag/';
+import { Point } from '../../models/surface-layout.model';
+import { DragTarget } from '../../services/drag/';
 
 
 @Component({
-	selector: 'surface',
-	templateUrl: './surface.component.html',
-	styleUrls: ['./surface.component.css'],
+	selector: 'grid',
+	templateUrl: './grid.component.html',
+	styleUrls: ['./grid.component.css'],
 	animations: [
-		trigger('displayCells', [
+		trigger('display', [
 			state('false', style({
 				paddingLeft: '15px',
 				paddingRight: '15px',
@@ -42,19 +42,14 @@ import { DragSource, DragTarget } from '../../services/drag/';
 		]),
 	]
 })
-export class SurfaceComponent implements DragTarget<Tile> {
+export class GridComponent implements DragTarget<void> {
 	private NUM_COLS = 6;
 	private CELL_PADDING = 18;
 
 	@Input() clickStream: Subject<[MouseEvent,number]>;
 	@Input() cellSize: Point;
-	@Input() items: Tile[];
-
-	ngOnInit () {
-		setTimeout(function () {
-			console.log(this.items)
-		},1000)
-	}
+	@Input() shouldDisplay: boolean;
+	@Input() items: void[];
 
 
 	onMouseUp(e: MouseEvent) {
@@ -65,7 +60,7 @@ export class SurfaceComponent implements DragTarget<Tile> {
 		this.clickStream.next([e,this.indexOf(e)]);
 	}
 
-	addItemsAtIndex<T>(items: T[], index: number[]): void { }
+	addItemsAtIndex<T>(items: T[], index: number[]): void{}
 
 	indexOf(e: MouseEvent) {
 		return parseInt(e.target.getAttribute('data-index'));

@@ -11,5 +11,13 @@ import { TrayItem } from '../../models/tray-item.model';
 })
 export class TrayComponent {
 	@Input() items: [TrayItem];
-	@Input() selectionStream: Subject<TrayItem>;
+	@Input() clickStream: Subject<[MouseEvent,number]>;
+
+	onMouseDown(e: MouseEvent) {
+		this.clickStream.next([e,this.indexOf(e)])
+	}
+
+	indexOf(e: MouseEvent) {
+		return parseInt(e.target.getAttribute('data-index'));
+	}
 }

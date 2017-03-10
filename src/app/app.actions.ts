@@ -3,12 +3,14 @@ import { Action } from '@ngrx/store';
 import { YoutubeSearchResults } from './models/youtube-search-results.model';
 import { TrayItem } from './models/tray-item.model';
 import { SurfaceLayout } from './models/surface-layout.model';
+import { DragSource, DragTarget } from './services/drag';
+
 
 export const ActionTypes = {
   SEARCH:                       'Search',
   SEARCH_COMPLETE:              'Search Complete',
-  PLACE_TRAY_ITEM:              'Place Tray Item',
-  PLACE_TRAY_ITEM_COMPLETE:     'Place Tray Item Complete',
+  DRAG:                         'Drag',
+  DRAG_COMPLETE:                'Drag Complete',
   RESIZE_SURFACE_ITEM:          'Resize Surface Item',
   RESIZE_SURFACE_ITEM_COMPLETE: 'Resize Surface Item Complete',
 };
@@ -25,16 +27,16 @@ export class SearchCompleteAction implements Action {
   constructor(public payload: YoutubeSearchResults) { }
 }
 
-export class PlaceTrayItemAction implements Action {
-  type = ActionTypes.PLACE_TRAY_ITEM;
+export class DragAction implements Action {
+  type = ActionTypes.DRAG;
 
-  constructor(public payload: TrayItem) { }
+  constructor(public payload: [string,number[]]) { }
 }
 
-export class PlaceTrayItemCompleteAction implements Action {
-  type = ActionTypes.PLACE_TRAY_ITEM_COMPLETE;
+export class DragCompleteAction implements Action {
+  type = ActionTypes.DRAG_COMPLETE;
 
-  constructor(public payload: SurfaceLayout) { }
+  constructor(public payload: [string,number[]]) { }
 }
 
 export class ResizeSurfaceItemAction implements Action {
@@ -52,7 +54,7 @@ export class ResizeSurfaceItemCompleteAction implements Action {
 export type Actions
   = SearchAction
   | SearchCompleteAction
-  | PlaceTrayItemAction
-  | PlaceTrayItemCompleteAction
+  | DragAction
+  | DragCompleteAction
   | ResizeSurfaceItemAction
   | ResizeSurfaceItemCompleteAction

@@ -1,0 +1,13 @@
+<!-- <div *ngIf="shouldDisplay"> -->
+<div>
+	<ul>
+		<li *ngFor="let item of items; let i = index"
+			[attr.data-index]="i"
+			[style.width.px]="cellSize.x"
+			[style.height.px]="cellSize.y"
+			[@display]="shouldDisplay"
+			(mousedown)="onMouseDown($event)"
+			(mouseup)="onMouseUp($event)">
+		</li>
+	</ul>
+</div>
