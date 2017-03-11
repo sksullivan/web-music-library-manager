@@ -13,6 +13,7 @@ export const ActionTypes = {
   DRAG_COMPLETE:                'Drag Complete',
   RESIZE_SURFACE_ITEM:          'Resize Surface Item',
   RESIZE_SURFACE_ITEM_COMPLETE: 'Resize Surface Item Complete',
+  NEW_LAYOUT:                   'New Layout',
 };
 
 export class SearchAction implements Action {
@@ -51,6 +52,12 @@ export class ResizeSurfaceItemCompleteAction implements Action {
   constructor(public payload: SurfaceLayout) { }
 }
 
+export class NewLayout implements Action {
+  type = ActionTypes.NEW_LAYOUT;
+
+  constructor(public payload: number) { }
+}
+
 export type Actions
   = SearchAction
   | SearchCompleteAction
@@ -58,3 +65,4 @@ export type Actions
   | DragCompleteAction
   | ResizeSurfaceItemAction
   | ResizeSurfaceItemCompleteAction
+  | NewLayout

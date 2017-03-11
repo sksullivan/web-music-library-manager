@@ -13,27 +13,15 @@ export interface State {
 	tray: TrayItem[][];
 	tile: Tile[][];
 	song: void[][];
-	gridSize: Point;
 	dragSourcePaths: number[][];
 	dragSourceType: string;
 };
-
-
-const NUM_COLS = 6;
-const GRID_CELL_PADDING = 18;
-const surfaceHeight = window.innerHeight;
-const surfaceWidth = window.innerWidth;
-
-const scaleHeight = Math.ceil(surfaceHeight*NUM_COLS/surfaceWidth);
-const scaleWidth = NUM_COLS;
-
-const gridSize = new Point(surfaceWidth/scaleWidth-2*GRID_CELL_PADDING,surfaceHeight/scaleHeight-2*GRID_CELL_PADDING);
 
 const initialState: State = {
 	searchQuery: "",
 	searchResults: new YoutubeSearchResults(),
 	loading: false,
-	grid: [<void[]>(new Array(scaleWidth*scaleHeight))],
+	grid: [],
 	tray: [
 		[
 			new TrayItem("search","","fa-search"),
@@ -48,7 +36,6 @@ const initialState: State = {
 		]
 	],
 	song: [],
-	gridSize: new Point(gridSize.x,gridSize.y),
 	dragSourcePaths: [],
 	dragSourceType: "",
 };
@@ -108,17 +95,21 @@ export function reducer(state = initialState, action: app.Actions): State {
 			};
 			
 			const draggedItemsRaw = state.dragSourcePaths
-				.map(path => state[state.dragSourceType][path[0]][path[1]])
+				.map(path => state[state.dragSourceType].atIndexPath(path));
+			console.log(draggedItemsRaw);
 
 			const draggedItems = draggedItemsRaw.reduce((prev,curr) => {
 					prev.push(curr)
 					return prev
 				},[])
+			console.log(draggedItems);
+
 
 			if (action.payload[0] == "grid") {
 				action.payload[0] = "tile";
 			}
-			const newItemsArray = state[action.payload[0]][action.payload[1][0]].injectArray(action.payload[1][1],transform(state.dragSourceType,action.payload[0],draggedItems,state.dragSourcePaths))
+
+			const newItemsArray = state[action.payload[0]][action.payload[1][0]].injectArray(action.payload[1][1],transform(state.dragSourceType,action.payload[0],draggedItems,state.dragSourcePaths,action.payload[1]))
 			state[action.payload[0]][action.payload[1][0]] = newItemsArray;
 
 			newState[action.payload[0]] = [].concat(state[action.payload[0]]);
@@ -138,16 +129,27 @@ export function reducer(state = initialState, action: app.Actions): State {
 			});
 		}
 
+		case app.ActionTypes.NEW_LAYOUT: {
+			console.log("replacing grid array")
+			return Object.assign({}, state, {
+				grid: [<void[]>(new Array(action.payload))],
+			});
+		}
+
 		default: {
 			return state;
 		}
 	}
 }
 
-function transform(sourceType: string, targetType: string, items: TrayItem[], indexPaths: number[][]): void[]|TrayItem[]  {
-	let transformFn = x => x;
+function transform(sourceType: string, targetType: string, items: TrayItem[], indexPaths: number[][], targetPath: number[]): void[]|TrayItem[]  {
+	console.log("Transforming "+sourceType+" into "+targetType+".");
+	console.log(indexPaths);
+	console.log("to");
+	console.log(targetPath);
+	let transformFn = (x: any) => x;
 	if (sourceType == "tray" && targetType == "tile") {
-		transformFn = ([trayItem,indexPath]:[TrayItem,number[]]) => new Tile(3,0,1,1);
+		transformFn = ([trayItem,indexPath]:[TrayItem,number[]]) => new Tile(targetPath[1],targetPath[2],1,1);
 	}
 	const mergedItemsPaths = items.map((item: void|TrayItem) => [item,indexPaths[items.indexOf(<TrayItem>item)]]);
 	return mergedItemsPaths.map(transformFn);
@@ -156,3 +158,11 @@ function transform(sourceType: string, targetType: string, items: TrayItem[], in
 Array.prototype.injectArray = function( idx, arr ) {
     return this.slice( 0, idx ).concat( arr ).concat( this.slice( idx ) );
 };
+
+Array.prototype.atIndexPath = function(path) {
+	let segment = this;
+	for (let pathComponent of path) {
+		segment = segment[pathComponent];
+	}
+	return segment;
+}

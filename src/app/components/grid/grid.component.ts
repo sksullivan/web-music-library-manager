@@ -2,7 +2,7 @@ import { Component, Input, trigger, state, style, transition, animate } from '@a
 import { Subject } from 'rxjs';
 
 import { Point } from '../../models/surface-layout.model';
-import { DragTarget } from '../../services/drag/';
+import { GridService } from '../../services/grid.service';
 
 
 @Component({
@@ -43,21 +43,22 @@ import { DragTarget } from '../../services/drag/';
 	]
 })
 export class GridComponent implements DragTarget<void> {
-	private NUM_COLS = 6;
-	private CELL_PADDING = 18;
 
-	@Input() clickStream: Subject<[MouseEvent,number]>;
+	@Input() clickStream: Subject<[MouseEvent,number[]]>;
 	@Input() cellSize: Point;
 	@Input() shouldDisplay: boolean;
 	@Input() items: void[];
 
+	constructor (private gridService: GridService) { }
 
 	onMouseUp(e: MouseEvent) {
-		this.clickStream.next([e,this.indexOf(e)]);
+		const linearIndex = this.indexOf(e);
+		this.clickStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]);
 	}
 
 	onMouseDown(e: MouseEvent) {
-		this.clickStream.next([e,this.indexOf(e)]);
+		const linearIndex = this.indexOf(e);
+		this.clickStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]);
 	}
 
 	addItemsAtIndex<T>(items: T[], index: number[]): void{}

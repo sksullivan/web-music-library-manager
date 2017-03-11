@@ -10,7 +10,6 @@ ul {
 li {
 	background-color: #56494e;
 	float: left;
-	margin: 15px;
 	border-radius: 35px;
 	transition: all 0.1s ease-in-out;
 	border: 3px #56494e solid;

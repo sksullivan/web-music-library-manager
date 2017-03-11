@@ -4,7 +4,7 @@ import { Http } from "@angular/http";
 import { BehaviorSubject, Subject } from 'rxjs';
 
 import { VideoService } from './services/video.service';
-import { DragService } from './services/drag/drag.service';
+import { GridService } from './services/grid.service';
 
 import { Store } from '@ngrx/store';
 import * as fromRoot from './reducers/search.reducer';
@@ -12,7 +12,6 @@ import * as app from './app.actions';
 import { YoutubeSearchResults } from './models/youtube-search-results.model';
 import { TrayItem } from './models/tray-item.model';
 import { Point, SurfaceLayout, Tile } from './models/surface-layout.model';
-import { DragSource, DragTarget } from './services/drag';
 
 import '../assets/css/styles.css';
 
@@ -21,7 +20,7 @@ import '../assets/css/styles.css';
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [VideoService,DragService]
+  providers: [VideoService,GridService]
 })
 
 @Injectable()
@@ -32,15 +31,19 @@ export class AppComponent {
 	private searchStream = new BehaviorSubject<string>("");
 	private gridTiles: void[];
 	private surfaceTiles: Tile[];
-	private trayClickStream = new Subject<[MouseEvent,number]>();
-	private gridClickStream = new Subject<[MouseEvent,number]>();
-	private tilesClickStream = new Subject<[MouseEvent,number]>();
+	private trayClickStream = new Subject<[MouseEvent,number[]]>();
+	private gridClickStream = new Subject<[MouseEvent,number[]]>();
+	private tilesClickStream = new Subject<[MouseEvent,number[]]>();
 	private trayItems: TrayItem[];
 	private mouseLocation = new Point(0,0);
 	private gridSize: Point;
 	private draggingFromTray: boolean = false;
 
-	constructor(private videoService: VideoService, private dragServicie: DragService, private store: Store<fromRoot.State>, zone: NgZone) {
+	constructor(
+		private videoService: VideoService,
+		private gridService: GridService,
+		private store: Store<fromRoot.State>,
+		zone: NgZone) {
 		this.registerStoreListeners();
 		this.registerStreamListeners();
 
@@ -75,20 +78,22 @@ export class AppComponent {
 				}
 			});
 		this.trayClickStream
-			.subscribe(([e,index]: [MouseEvent,number]) => {
-				let path = [index];
-				path.unshift(0);
+			.subscribe(([e,indexPath]: [MouseEvent,number[]]) => {
+				console.log(indexPath)
+				indexPath.unshift(0);
 				if (e.type == "mousedown") {
-					this.store.dispatch(new app.DragAction(["tray",path]));
+					this.store.dispatch(new app.DragAction(["tray",indexPath]));
 				}
 			});
 		this.gridClickStream
-			.subscribe(([e,index]: [MouseEvent,number]) => {
-				let path = [index];
-				path.unshift(0);
+			.subscribe(([e,indexPath]: [MouseEvent,number[]]) => {
+				console.log(indexPath)
+				indexPath.unshift(0);
 				if (e.type == "mouseup") {
-					this.store.dispatch(new app.DragCompleteAction(["grid",path]));
+					this.store.dispatch(new app.DragCompleteAction(["grid",indexPath]));
 				}
 			});
+		this.gridService.layoutInfoStream
+			.subscribe(() => { this.store.dispatch(new app.NewLayout(this.gridService.cols*this.gridService.rows)) });
 	}
 }

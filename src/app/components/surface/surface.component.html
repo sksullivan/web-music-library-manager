@@ -3,10 +3,11 @@
 	<ul>
 		<li class="tile" *ngFor="let item of items; let i = index"
 			[attr.data-index]="i"
-			[style.width.px]="item.relativeExtent.x*(this.cellSize.x+2*this.CELL_PADDING)-2*this.CELL_PADDING"
-			[style.height.px]="item.relativeExtent.y*(this.cellSize.y+2*this.CELL_PADDING)-2*this.CELL_PADDING"
-			[style.left.px]="item.origin.x*(this.cellSize.x+2*this.CELL_PADDING)"
-			[style.top.px]="item.origin.y*(this.cellSize.y+2*this.CELL_PADDING)">
+			[style.width.px]="item.relativeExtent.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
+			[style.height.px]="item.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
+			[style.left.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+item.origin.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)"
+			[style.top.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+item.origin.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)"
+			[style.border-width.px]="this.gridService.cellBorderWidth">
 		</li>
 	</ul>
 </div>

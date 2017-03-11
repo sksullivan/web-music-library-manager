@@ -14,7 +14,7 @@ import { SurfaceComponent } from './components/surface/surface.component';
 import { GridComponent } from './components/grid/grid.component';
 
 import { VideoService } from './services/video.service';
-import { DragService } from './services/drag/drag.service';
+import { GridService } from './services/grid.service';
 
 import { reducer } from './reducers/search.reducer';
 
