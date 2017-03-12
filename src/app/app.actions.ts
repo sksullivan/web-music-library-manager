@@ -2,8 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { YoutubeSearchResults } from './models/youtube-search-results.model';
 import { TrayItem } from './models/tray-item.model';
-import { SurfaceLayout } from './models/surface-layout.model';
-import { DragSource, DragTarget } from './services/drag';
+import { CollectionModficationData } from './models/collection-modification-data.model';
 
 
 export const ActionTypes = {
@@ -19,25 +18,25 @@ export const ActionTypes = {
 export class SearchAction implements Action {
   type = ActionTypes.SEARCH;
 
-  constructor(public payload: string) { }
+  constructor(public payload: CollectionModficationData) { }
 }
 
 export class SearchCompleteAction implements Action {
   type = ActionTypes.SEARCH_COMPLETE;
 
-  constructor(public payload: YoutubeSearchResults) { }
+  constructor(public payload: CollectionModficationData) { }
 }
 
 export class DragAction implements Action {
   type = ActionTypes.DRAG;
 
-  constructor(public payload: [string,number[]]) { }
+  constructor(public payload: CollectionModficationData) { }
 }
 
 export class DragCompleteAction implements Action {
   type = ActionTypes.DRAG_COMPLETE;
 
-  constructor(public payload: [string,number[]]) { }
+  constructor(public payload: CollectionModficationData) { }
 }
 
 export class ResizeSurfaceItemAction implements Action {
@@ -49,7 +48,7 @@ export class ResizeSurfaceItemAction implements Action {
 export class ResizeSurfaceItemCompleteAction implements Action {
   type = ActionTypes.RESIZE_SURFACE_ITEM_COMPLETE;
 
-  constructor(public payload: SurfaceLayout) { }
+  constructor(public payload: any) { }
 }
 
 export class NewLayout implements Action {

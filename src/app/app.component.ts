@@ -11,7 +11,9 @@ import * as fromRoot from './reducers/search.reducer';
 import * as app from './app.actions';
 import { YoutubeSearchResults } from './models/youtube-search-results.model';
 import { TrayItem } from './models/tray-item.model';
-import { Point, SurfaceLayout, Tile } from './models/surface-layout.model';
+import { Point } from './models/geom.model';
+import { Tile } from './models/tile.model';
+import { CollectionModficationData } from './models/collection-modification-data.model';
 
 import '../assets/css/styles.css';
 
@@ -52,45 +54,41 @@ export class AppComponent {
 	}
 
 	registerStoreListeners() {
-		this.store.select('searchResults').subscribe((results: YoutubeSearchResults) => { this.searchResults = results });
-		this.store.select('loading').subscribe((loading: boolean) => { this.loading = loading });
-		this.store.select('gridSize').subscribe((gridSize: Point) => { this.gridSize = gridSize });
-		this.store.select('grid').subscribe((grid: void[][]) => { this.gridTiles = grid[0]; });
-		this.store.select('tile').subscribe((tile: Tile[][]) => { this.surfaceTiles = tile[0] });
-		this.store.select('tray').subscribe((tray: TrayItem[][]) => { this.trayItems = tray[0]; });
-		this.store.select('dragSourceType').subscribe((type: string) => { this.draggingFromTray = type == "tray" });
+		this.store.select('searchResults').subscribe((results: YoutubeSearchResults) => this.searchResults = results);
+		this.store.select('loading').subscribe((loading: boolean) => this.loading = loading);
+		this.store.select('gridSize').subscribe((gridSize: Point) => this.gridSize = gridSize);
+		this.store.select('grid').subscribe((grid: void[][]) => this.gridTiles = grid[0]);
+		this.store.select('tile').subscribe((tile: Tile[][]) => this.surfaceTiles = tile[0]);
+		this.store.select('tray').subscribe((tray: TrayItem[][]) => this.trayItems = tray[0]);
+		this.store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[] ) => {
+			this.draggingFromTray = draggedItemData.length > 0 && draggedItemData[0].collectionKey == "tray";
+		});
 	}
 
 	registerStreamListeners() {
-		this.searchStream
-		.debounceTime(40)
-			.filter(search => search.length > 1)
-			.subscribe(search => {
-				this.store.dispatch(new app.SearchAction(search))
-				this.videoService.fetchVideos(search)
-					.subscribe(searchResults => this.store.dispatch(new app.SearchCompleteAction(searchResults)));
-			});
-		this.searchStream
-			.delay(300)
-			.subscribe(search => {
-				if (search == "") {
-					this.store.dispatch(new app.SearchCompleteAction(new YoutubeSearchResults()));
-				}
-			});
 		this.trayClickStream
 			.subscribe(([e,indexPath]: [MouseEvent,number[]]) => {
-				console.log(indexPath)
-				indexPath.unshift(0);
+				const trayDragInfo = new CollectionModficationData();
+				trayDragInfo.collectionKey = "tray";
+				trayDragInfo.collectionIndex = 0;
+				trayDragInfo.path = indexPath;
 				if (e.type == "mousedown") {
-					this.store.dispatch(new app.DragAction(["tray",indexPath]));
+					this.store.dispatch(new app.DragAction(trayDragInfo));
 				}
 			});
 		this.gridClickStream
 			.subscribe(([e,indexPath]: [MouseEvent,number[]]) => {
-				console.log(indexPath)
-				indexPath.unshift(0);
 				if (e.type == "mouseup") {
-					this.store.dispatch(new app.DragCompleteAction(["grid",indexPath]));
+					indexPath.push(0);
+					console.log("lookin for vals")
+					const nextCollectionId = this.store.select('tile') /* ? SHOULD BE ARRAY HERE ? */.map(x => x).scan((acc: number,value: number) => acc + 1)
+					console.log(nextCollectionId);
+					const gridDropInfo = new CollectionModficationData();
+					gridDropInfo.collectionKey = "tile";
+					gridDropInfo.collectionIndex = 0;
+					gridDropInfo.path = [0];
+					gridDropInfo.transformArguments = indexPath;
+					this.store.dispatch(new app.DragCompleteAction(gridDropInfo));
 				}
 			});
 		this.gridService.layoutInfoStream

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
-import { Point } from '../models/surface-layout.model';
+import { Point } from '../models/geom.model';
 
 
 @Injectable()

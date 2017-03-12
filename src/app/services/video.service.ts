@@ -18,7 +18,7 @@ export class VideoService {
           '&type=video' +
           '&key=AIzaSyAARhzDEdAwaIYKelgTmVa8Nez5sLKjBcM')
       .map(response => {
-        return new YoutubeSearchResults(response.json());
+        return response.json();
       })
   }
 }

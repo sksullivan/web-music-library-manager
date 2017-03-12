@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 
 import { GridService } from '../../services/grid.service';
 
-import { Point, Tile } from '../../models/surface-layout.model';
-import { DragSource, DragTarget } from '../../services/drag/';
+import { Point } from '../../models/geom.model';
+import { Tile } from '../../models/tile.model';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { DragSource, DragTarget } from '../../services/drag/';
 	templateUrl: './surface.component.html',
 	styleUrls: ['./surface.component.css'],
 })
-export class SurfaceComponent implements DragTarget<Tile> {
+export class SurfaceComponent {
 
 	@Input() clickStream: Subject<[MouseEvent,number]>;
 	@Input() cellSize: Point;

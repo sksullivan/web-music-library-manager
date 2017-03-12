@@ -1,7 +1,7 @@
 import { Component, Input, trigger, state, style, transition, animate } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Point } from '../../models/surface-layout.model';
+import { Point } from '../../models/geom.model';
 import { GridService } from '../../services/grid.service';
 
 
@@ -42,7 +42,7 @@ import { GridService } from '../../services/grid.service';
 		]),
 	]
 })
-export class GridComponent implements DragTarget<void> {
+export class GridComponent {
 
 	@Input() clickStream: Subject<[MouseEvent,number[]]>;
 	@Input() cellSize: Point;
@@ -53,12 +53,12 @@ export class GridComponent implements DragTarget<void> {
 
 	onMouseUp(e: MouseEvent) {
 		const linearIndex = this.indexOf(e);
-		this.clickStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]);
+		this.clickStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]]);
 	}
 
 	onMouseDown(e: MouseEvent) {
 		const linearIndex = this.indexOf(e);
-		this.clickStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]);
+		this.clickStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]]);
 	}
 
 	addItemsAtIndex<T>(items: T[], index: number[]): void{}

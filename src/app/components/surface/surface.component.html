@@ -8,6 +8,7 @@
 			[style.left.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+item.origin.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)"
 			[style.top.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+item.origin.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)"
 			[style.border-width.px]="this.gridService.cellBorderWidth">
+			<tile [model]="item"></tile>
 		</li>
 	</ul>
 </div>

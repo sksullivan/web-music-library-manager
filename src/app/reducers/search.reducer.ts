@@ -1,118 +1,97 @@
 import * as app from '../app.actions';
 import { YoutubeSearchResults } from '../models/youtube-search-results.model';
 import { YoutubeVideo } from '../models/youtube-video.model';
-import { Point, SurfaceLayout, Tile } from '../models/surface-layout.model';
+import { Point } from '../models/geom.model';
+import { Tile } from '../models/tile.model';
+import { Song } from '../models/song.model';
 import { TrayItem } from '../models/tray-item.model';
+import { State, initialState } from '../models/app.model';
+import { CollectionModficationData } from '../models/collection-modification-data.model';
 
-
-export interface State {
-	searchQuery: string;
-	searchResults: YoutubeSearchResults;
-	loading: boolean;
-	grid: void[][];
-	tray: TrayItem[][];
-	tile: Tile[][];
-	song: void[][];
-	dragSourcePaths: number[][];
-	dragSourceType: string;
-};
-
-const initialState: State = {
-	searchQuery: "",
-	searchResults: new YoutubeSearchResults(),
-	loading: false,
-	grid: [],
-	tray: [
-		[
-			new TrayItem("search","","fa-search"),
-			new TrayItem("playback","","fa-youtube-play"),
-			new TrayItem("decks","","💿"),
-		],
-	],
-	tile: [
-		[
-			new Tile(0,0,1,1),
-			new Tile(1,1,2,2),
-		]
-	],
-	song: [],
-	dragSourcePaths: [],
-	dragSourceType: "",
-};
 
 export function reducer(state = initialState, action: app.Actions): State {
+	console.log(action)
+	console.log(state)
 	switch (action.type) {
 		case app.ActionTypes.SEARCH_COMPLETE: {
+			const data = <CollectionModficationData>action.payload;
+			console.log(data)
 
-			return Object.assign({}, state, {
-				searchResults: action.payload,
-				loading: false
-			});
+			state['song'][data.collectionIndex] = data.transformArguments;
+				
+			const newState = {};
+			newState['song'] = [].concat(state['song']);
+			console.log("About to be new state is")
+			console.log(newState)
+
+			return Object.assign({}, state, newState);
 		}
 
 		case app.ActionTypes.SEARCH: {
-			let shouldDisplayLoading = false;
-			if (state.searchResults.items.length == 0) {
-				shouldDisplayLoading = true;
-			}
+			const data = <CollectionModficationData>action.payload;
+			state['search'][data.collectionIndex] = data.transformArguments;
+			state['search'][data.collectionIndex] = [].concat(state['search'][data.collectionIndex]);
 
 			return Object.assign({}, state, {
-				searchQuery: action.payload,
-				loading: shouldDisplayLoading
+				search: state['search'][data.collectionIndex]
 			});
 		}
 
 		case app.ActionTypes.DRAG: {
-			
-			if (state.dragSourceType != "" && action.payload[0] != state.dragSourceType) {
-				console.log("CANCEL SELECTION")
+			const data = <CollectionModficationData>action.payload;
+			if (state.draggedItemData.length > 0 && data.collectionKey != state.draggedItemData[0].collectionKey) {
+				console.log("CANCELING SELECTION")
 				return Object.assign({}, state, {
-					dragSourceType: "",
-					dragSourcePaths: [],
+					accumulatedDragSourceData: []
 				});
 			}
-			console.log("DRAG")
-			state.dragSourcePaths.push(action.payload[1])
+			console.log("DRAG STARTED")
+			state.draggedItemData = state.draggedItemData.concat([data]);
 			return Object.assign({}, state, {
-				dragSourceType: action.payload[0],
-				dragSourcePaths: state.dragSourcePaths,
+				draggedItemData: state.draggedItemData,
 			});
 		}
 
 		case app.ActionTypes.DRAG_COMPLETE: {
-			if (state.dragSourceType == "" ) {
+			const data = <CollectionModficationData>action.payload
+
+			if (state.draggedItemData.length < 1) {
 				return state;
 			}
-			console.log("COMPLETE")
-			console.log("inserting into")
-			console.log(action.payload[0])
-			console.log("from")
-			console.log(state.dragSourceType);
+			const sourceCollectionKey = state.draggedItemData[0].collectionKey;
 
-			let newState = {
-				dragSourceType: "",
-				dragSourcePaths: <number[][]>[],
-			};
+
+			console.log("DRAG ENDED");
+			console.log("from");
+			console.log(sourceCollectionKey);
+			console.log("to");
+			console.log(data.collectionKey);
+			console.log(data)
 			
-			const draggedItemsRaw = state.dragSourcePaths
-				.map(path => state[state.dragSourceType].atIndexPath(path));
-			console.log(draggedItemsRaw);
+			const draggedItemsRaw = state.draggedItemData
+				.map(itemData => state[sourceCollectionKey][itemData.collectionIndex].atIndexPath(itemData.path));
 
 			const draggedItems = draggedItemsRaw.reduce((prev,curr) => {
 					prev.push(curr)
 					return prev
 				},[])
-			console.log(draggedItems);
 
+			const targetCollection = state[data.collectionKey][data.collectionIndex];
 
-			if (action.payload[0] == "grid") {
-				action.payload[0] = "tile";
-			}
+			console.log("inserting new stuff at path")
+			console.log(data.path)
+			const newItemsArray = targetCollection
+				.injectArray(data.path,
+					transform(sourceCollectionKey,data.collectionKey,draggedItems,data.transformArguments,targetCollection.length));
 
-			const newItemsArray = state[action.payload[0]][action.payload[1][0]].injectArray(action.payload[1][1],transform(state.dragSourceType,action.payload[0],draggedItems,state.dragSourcePaths,action.payload[1]))
-			state[action.payload[0]][action.payload[1][0]] = newItemsArray;
+			state[data.collectionKey][data.collectionIndex] = newItemsArray;
 
-			newState[action.payload[0]] = [].concat(state[action.payload[0]]);
+			state.draggedItemData = [];
+
+			const newState = {};
+			newState[data.collectionKey] = [];
+			newState[data.collectionKey] = [].concat(state[data.collectionKey]);
+
 			return Object.assign({}, state, newState);
 		}
 
@@ -130,7 +109,6 @@ export function reducer(state = initialState, action: app.Actions): State {
 		}
 
 		case app.ActionTypes.NEW_LAYOUT: {
-			console.log("replacing grid array")
 			return Object.assign({}, state, {
 				grid: [<void[]>(new Array(action.payload))],
 			});
@@ -142,17 +120,12 @@ export function reducer(state = initialState, action: app.Actions): State {
 	}
 }
 
-function transform(sourceType: string, targetType: string, items: TrayItem[], indexPaths: number[][], targetPath: number[]): void[]|TrayItem[]  {
-	console.log("Transforming "+sourceType+" into "+targetType+".");
-	console.log(indexPaths);
-	console.log("to");
-	console.log(targetPath);
+function transform(sourceType: string, targetType: string, items: TrayItem[], args: number[], collectionIndex: number): void[]|TrayItem[]  {
 	let transformFn = (x: any) => x;
 	if (sourceType == "tray" && targetType == "tile") {
-		transformFn = ([trayItem,indexPath]:[TrayItem,number[]]) => new Tile(targetPath[1],targetPath[2],1,1);
+		transformFn = (trayItem:TrayItem) => new Tile(args[0],args[1],1,1,trayItem.componentName,collectionIndex);
 	}
-	const mergedItemsPaths = items.map((item: void|TrayItem) => [item,indexPaths[items.indexOf(<TrayItem>item)]]);
-	return mergedItemsPaths.map(transformFn);
+	return items.map(transformFn);
 }
 
 Array.prototype.injectArray = function( idx, arr ) {
