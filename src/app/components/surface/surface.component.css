@@ -22,3 +22,34 @@ tile {
 	width: 100%;
 	height: 100%;
 }
+
+span {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	color: #56494e;
+	opacity: 0.0;
+	background: linear-gradient(0deg, rgba(162,156,155,1), rgba(162,156,155,1) 30%, rgba(162,156,155,0));
+    width: 100%;
+    height: 30px;
+	transition: all 0.1s ease-in-out;
+}
+
+span:hover {
+	opacity: 1.0;
+}
+
+span .fa {
+	float: right;
+	line-height: 30px;
+	padding-right: 5px;
+	padding-bottom: 5px;	
+}
+
+span .fa:hover {
+	text-shadow: 0 2px 7px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.30);
+}
+
+span .fa:active {
+	color: #a29c9b;
+}
