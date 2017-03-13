@@ -12,7 +12,7 @@ import { TileBase } from '../tile-base.model';
   styleUrls: ['./playback.component.css']
 })
 export class PlaybackComponent extends TileBase {
-	constructor(protected store: Store<fromRoot.State>, protected collectionIndex: number) {
-		super(store,collectionIndex);
+	constructor(protected store: Store<fromRoot.State>, protected collectionIndices: number[]) {
+		super(store,collectionIndices);
 	}
 }

@@ -18,9 +18,9 @@
 		</div>
  	</div>
  	<tray [items]="trayItems" [clickStream]="trayClickStream"></tray>
-	<tray-item *ngIf="placingTrayItem" 
-		[item]="placingTrayItem"
-		[style.left.px]="mouseLocation.x"	
-		[style.top.px]="mouseLocation.y">
-	</tray-item>
+	<drag-indicator *ngIf="draggedItemCount > 0"
+		[itemCount]="draggedItemCount"
+		[style.left.px]="mouseLocation.x-30"	
+		[style.top.px]="mouseLocation.y-30">
+	</drag-indicator>
 </main>

@@ -11,7 +11,7 @@ export class GridService {
 	cellWidth: number;
 	cellHeight: number;
 	cellPadding = 18;
-	cellBorderWidth = 3;
+	cellBorderWidth = 0;
 
 	layoutInfoStream = new ReplaySubject<void>();
 

@@ -1,4 +1,28 @@
 input {
-	color: black;
+	color: #56494e;
 	user-select: none;
+	padding: 5px;
+}
+
+input[type=text] {
+	border: none;
+	border-bottom: 3px solid #56494e;
+    background: rgba(1,1,1,0);
+    outline: none;
+    font-size: 24px;
+}
+
+::-webkit-input-placeholder { /* Chrome */
+  color: #56494e;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #56494e;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #56494e;
+  opacity: 1;
+}
+:-moz-placeholder { /* Firefox 4 - 18 */
+  color: #56494e;
+  opacity: 1;
 }

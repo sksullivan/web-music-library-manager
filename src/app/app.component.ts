@@ -40,7 +40,7 @@ export class AppComponent {
 	private mouseLocation = new Point(0,0);
 	private gridSize: Point;
 	private draggingFromTray: boolean = false;
-	private draggedItems: number;
+	private draggedItemCount = 0;
 
 	constructor(
 		private videoService: VideoService,
@@ -62,6 +62,7 @@ export class AppComponent {
 		this.store.select('tile').subscribe((tile: Tile[][]) => this.surfaceTiles = tile[0]);
 		this.store.select('tray').subscribe((tray: TrayItem[][]) => this.trayItems = tray[0]);
 		this.store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[] ) => {
+			this.draggedItemCount = draggedItemData.length;
 			console.log("Now have "+draggedItemData.length+" dragged items.");
 			this.draggingFromTray = draggedItemData.length > 0 && draggedItemData[0].collectionKey == "tray";
 		});

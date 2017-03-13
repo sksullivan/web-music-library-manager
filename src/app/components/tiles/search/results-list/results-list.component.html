@@ -1,5 +1,4 @@
 <i *ngIf="loading" class="fa fa-cog fa-spin fa-3x fa-fw"></i>
-:{{ collectionIndex }}
 <ul *ngIf="!loading" (mouseup)="onMouse($event,true)">
 	<li *ngFor="let song of items; let i = index"
 		[attr.data-index]="i"

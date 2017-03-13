@@ -15,6 +15,7 @@ import { SurfaceComponent } from './components/surface/surface.component';
 import { GridComponent } from './components/grid/grid.component';
 import { TileComponent } from './components/tile/tile.component';
 import { PlaybackComponent } from './components/tiles/playback/playback.component';
+import { DragIndicatorComponent } from './components/drag-indicator/drag-indicator.component';
 
 import { VideoService } from './services/video.service';
 import { GridService } from './services/grid.service';
@@ -40,6 +41,7 @@ import { reducer } from './reducers/search.reducer';
     GridComponent,
     TileComponent,
     PlaybackComponent,
+    DragIndicatorComponent,
   ],
   entryComponents: [
     PlaybackComponent,

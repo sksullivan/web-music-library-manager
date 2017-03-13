@@ -9,24 +9,35 @@ import { TileBase } from '../../tile-base.model';
 import { CollectionModficationData } from '../../../../models/collection-modification-data.model';
 
 
+
 @Component({
   selector: 'results-list',
   templateUrl: './results-list.component.html',
   styleUrls: ['./results-list.component.css']
 })
 export class ResultsListComponent extends TileBase {
-	items: Song[];
+	items = <Song[]>[];
+	highlightClass = <string[]>[];
 
-	constructor(protected store: Store<fromRoot.State>, private collectionIndex: number) {
-		super(store,collectionIndex);
+	constructor(protected store: Store<fromRoot.State>, private collectionIndices: number[]) {
+		super(store,collectionIndices);
 		store.select('song').subscribe((newSongs: Song[][]) => {
-			this.items = newSongs[collectionIndex];
+			console.log('klsdsd')
+			console.log(this.items)
+			this.items = newSongs[collectionIndices['song']];
+			console.log('klsdsd')
+			console.log(this.items)
+		});
+		store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[]) => {
+			console.log('kl')
+			console.log(this.items)
 			this.highlightClass = <string[]>Array(this.items.length);
-			// if (this.items.length == 0) {
-			// 	this.items = Array.from(new Array(10),() => new Song('','',''));
-			// }
-				console.log(this.items);
-
+			draggedItemData
+				.filter(item => item.collectionKey == "song")
+				.filter(item => item.collectionIndex == this.collectionIndices['song'])
+				.map(item => this.highlightClass[item.path[0]] = "selected");
+			console.log("Updated highlights to")
+			console.log(this.highlightClass);
 		});
 	}
 
@@ -37,7 +48,7 @@ export class ResultsListComponent extends TileBase {
 		// }
 		const songDragInfo = new CollectionModficationData();
 		songDragInfo.collectionKey = "song";
-		songDragInfo.collectionIndex = this.collectionIndex;
+		songDragInfo.collectionIndex = this.collectionIndices['song'];
 		songDragInfo.path = [this.indexOf(e)];
 		if (isNaN(songDragInfo.path[0])) {
 			songDragInfo.path = [this.items.length];

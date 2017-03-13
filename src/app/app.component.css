@@ -14,10 +14,19 @@ tray {
     left: 5%;
 }
 
-tray-item {
+drag-indicator {
 	position: fixed;
 	top: 0px;
 	right: 0px;
+	pointer-events: none;
+
+	background-color: rgb(162, 156, 155);
+    color: rgb(86, 73, 78);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    line-height: 40px;
+    text-align: center;
 }
 
 grid {

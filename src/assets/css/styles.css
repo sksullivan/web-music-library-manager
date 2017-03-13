@@ -9,19 +9,8 @@ html,body {
     user-select: none !important;
 }
 
-input {
-    /*font-family: monospace;*/
-}
-
-input[type=text] {
-	border: none;
-	border-bottom: 3px solid #a29c9b;
-    background: rgba(1,1,1,0);
-    padding: 0;
-    padding-bottom: 5px;
-    outline: none;
-    color: #a29c9b;
-    font-size: 24px;
+::-webkit-scrollbar { 
+    display: none; 
 }
 
 /*
