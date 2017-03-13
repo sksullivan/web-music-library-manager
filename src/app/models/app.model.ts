@@ -26,10 +26,10 @@ const initialState: State = {
 	grid: [[]],
 	tray: [
 		[
-			new TrayItem("search","SearchComponent","fa-search"),
-			new TrayItem("playback","PlaybackComponent","fa-youtube-play"),
-			new TrayItem("decks","PlaybackComponent","💿"),
-			new TrayItem("list","ResultsListComponent","fa-list"),
+			new TrayItem("search","SearchComponent",["search","song"],"fa-search"),
+			new TrayItem("playback","PlaybackComponent",[],"fa-youtube-play"),
+			new TrayItem("decks","PlaybackComponent",[],"💿"),
+			new TrayItem("list","ResultsListComponent",["song"],"fa-list"),
 		],
 	],
 	tile: [[]],
