@@ -29,6 +29,7 @@ const initialState: State = {
 			new TrayItem("search","SearchComponent","fa-search"),
 			new TrayItem("playback","PlaybackComponent","fa-youtube-play"),
 			new TrayItem("decks","PlaybackComponent","💿"),
+			new TrayItem("list","ResultsListComponent","fa-list"),
 		],
 	],
 	tile: [[]],

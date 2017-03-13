@@ -43,6 +43,7 @@ import { reducer } from './reducers/search.reducer';
   ],
   entryComponents: [
     PlaybackComponent,
+    ResultsListComponent,
     SearchComponent,
   ],
   bootstrap: [ AppComponent ]

@@ -9,6 +9,11 @@ import { State, initialState } from '../models/app.model';
 import { CollectionModficationData } from '../models/collection-modification-data.model';
 
 
+const allowedDragOperations = {
+	"tray": ["tray","tile"],
+	"song": ["song"],
+};
+
 export function reducer(state = initialState, action: app.Actions): State {
 	console.log(action)
 	console.log(state)
@@ -47,6 +52,8 @@ export function reducer(state = initialState, action: app.Actions): State {
 			}
 			console.log("DRAG STARTED")
 			state.draggedItemData = state.draggedItemData.concat([data]);
+			console.log(state.draggedItemData.map(x => x.path[0]));
+
 			return Object.assign({}, state, {
 				draggedItemData: state.draggedItemData,
 			});
@@ -58,15 +65,19 @@ export function reducer(state = initialState, action: app.Actions): State {
 			if (state.draggedItemData.length < 1) {
 				return state;
 			}
+			
 			const sourceCollectionKey = state.draggedItemData[0].collectionKey;
+			if (!allowedDragOperations[sourceCollectionKey].includes(data.collectionKey)) {
+				return Object.assign({}, state, {
+					draggedItemData: [],
+				});
+			}
 
 
 			console.log("DRAG ENDED");
-			console.log("from");
-			console.log(sourceCollectionKey);
-			console.log("to");
-			console.log(data.collectionKey);
-			console.log(data)
+			console.log(sourceCollectionKey+" -> "+data.collectionKey);
+			console.log(data.path)
+			console.log(state.draggedItemData.map(x => x.path[0]));
 			
 			const draggedItemsRaw = state.draggedItemData
 				.map(itemData => state[sourceCollectionKey][itemData.collectionIndex].atIndexPath(itemData.path));
@@ -76,21 +87,25 @@ export function reducer(state = initialState, action: app.Actions): State {
 					return prev
 				},[])
 
-			const targetCollection = state[data.collectionKey][data.collectionIndex];
+			const targetCollection = state[data.collectionKey][data.collectionIndex] || [];
 
-			console.log("inserting new stuff at path")
-			console.log(data.path)
 			const newItemsArray = targetCollection
 				.injectArray(data.path,
 					transform(sourceCollectionKey,data.collectionKey,draggedItems,data.transformArguments,targetCollection.length));
 
 			state[data.collectionKey][data.collectionIndex] = newItemsArray;
 
+			if (sourceCollectionKey == "song") {
+				state.draggedItemData.map(itemData => state[sourceCollectionKey][itemData.collectionIndex].splice(itemData.path[0],1));
+			}
+
 			state.draggedItemData = [];
 
 			const newState = {};
 			newState[data.collectionKey] = [];
+			newState[sourceCollectionKey] = [];
 			newState[data.collectionKey] = [].concat(state[data.collectionKey]);
+			newState[sourceCollectionKey] = [].concat(state[sourceCollectionKey]);
 
 			return Object.assign({}, state, newState);
 		}

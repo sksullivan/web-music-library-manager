@@ -8,7 +8,10 @@
 			[style.left.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+item.origin.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)"
 			[style.top.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+item.origin.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)"
 			[style.border-width.px]="this.gridService.cellBorderWidth">
-			<tile [model]="item"></tile>
+			<tile [model]="item"
+				[style.width.px]="item.relativeExtent.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
+				[style.height.px]="item.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding">
+			</tile>
 		</li>
 	</ul>
 </div>

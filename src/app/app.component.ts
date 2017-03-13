@@ -40,6 +40,7 @@ export class AppComponent {
 	private mouseLocation = new Point(0,0);
 	private gridSize: Point;
 	private draggingFromTray: boolean = false;
+	private draggedItems: number;
 
 	constructor(
 		private videoService: VideoService,
@@ -61,6 +62,7 @@ export class AppComponent {
 		this.store.select('tile').subscribe((tile: Tile[][]) => this.surfaceTiles = tile[0]);
 		this.store.select('tray').subscribe((tray: TrayItem[][]) => this.trayItems = tray[0]);
 		this.store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[] ) => {
+			console.log("Now have "+draggedItemData.length+" dragged items.");
 			this.draggingFromTray = draggedItemData.length > 0 && draggedItemData[0].collectionKey == "tray";
 		});
 	}
@@ -79,10 +81,7 @@ export class AppComponent {
 		this.gridClickStream
 			.subscribe(([e,indexPath]: [MouseEvent,number[]]) => {
 				if (e.type == "mouseup") {
-					indexPath.push(0);
-					console.log("lookin for vals")
-					const nextCollectionId = this.store.select('tile') /* ? SHOULD BE ARRAY HERE ? */.map(x => x).scan((acc: number,value: number) => acc + 1)
-					console.log(nextCollectionId);
+					const nextCollectionId = this.store.select('tile').scan((acc: number,value: number) => acc + 1)
 					const gridDropInfo = new CollectionModficationData();
 					gridDropInfo.collectionKey = "tile";
 					gridDropInfo.collectionIndex = 0;

@@ -33,7 +33,7 @@ import { GridService } from '../../services/grid.service';
 				marginRight: '15px',
 				marginTop: '15px',
 				marginBottom: '15px',
-				borderRadius: '35px',
+				borderRadius: '15px',
 				border: '3px #a29c9b dashed',
 				backgroundColor: '#56494e',
 			})),

@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { Tile } from '../../models/tile.model';
 import { PlaybackComponent } from '../tiles/playback/playback.component';
 import { SearchComponent } from '../tiles/search/search.component';
+import { ResultsListComponent } from '../tiles/search/results-list/results-list.component';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class TileComponent {
 	private children = {
 		PlaybackComponent: PlaybackComponent,
 		SearchComponent: SearchComponent,
+		ResultsListComponent: ResultsListComponent,
 	};
 
 	renderComponent() {
