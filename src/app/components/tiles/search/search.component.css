@@ -1,5 +1,3 @@
-main {
-  margin: 1em;
-  display: block;
-  color: black;
+search-field, results-list {
+	user-select: none;
 }

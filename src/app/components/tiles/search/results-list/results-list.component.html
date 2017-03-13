@@ -1,15 +1,11 @@
-<div *ngIf="loading">
-	<i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
-</div>
-<div *ngIf="!loading" (mouseup)="onMouse($event)">
-	:{{ collectionIndex }}
-	<ul>
-		<li *ngFor="let song of items; let i = index"
-			[attr.data-index]="i"
-			[ngClass]="highlightClass[i]"
-			(mousedown)="onMouse($event)"
-			(mouseup)="onMouse($event)">
-			{{ song.title }}
-		</li>
-	</ul>
-</div>
+<i *ngIf="loading" class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+:{{ collectionIndex }}
+<ul *ngIf="!loading" (mouseup)="onMouse($event,true)">
+	<li *ngFor="let song of items; let i = index"
+		[attr.data-index]="i"
+		[ngClass]="highlightClass[i]"
+		(mousedown)="onMouse($event,false)"
+		(mouseup)="onMouse($event,false)">
+		{{ song.title }}
+	</li>
+</ul>

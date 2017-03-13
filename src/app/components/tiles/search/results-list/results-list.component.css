@@ -4,6 +4,7 @@ ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+	user-select: none;
 }
 
 li {
@@ -14,9 +15,6 @@ li {
 li:hover {
 	/*background-color: #a29c9b;*/
 	/*color: #56494e;*/
-}
-div {
-	user-select: none;
 }
 .selected {
 	background-color: #a29c9b;

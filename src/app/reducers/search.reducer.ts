@@ -87,7 +87,6 @@ export function reducer(state = initialState, action: app.Actions): State {
 					return prev
 				},[])
 
-			console.log(draggedItems);
 			if (sourceCollectionKey == "tray") {
 				console.log("About to make new collections for tile")
 				draggedItems[0].requiredCollectionKeys.map((key: string) => {
@@ -107,36 +106,16 @@ export function reducer(state = initialState, action: app.Actions): State {
 				state.draggedItemData.map(itemData => state[sourceCollectionKey][itemData.collectionIndex].splice(itemData.path[0],1));
 			}
 
-			console.log("determine if we should clear selection")
-			const isNoChangeSongDrag = sourceCollectionKey == "song"
-				&& data.collectionKey == "song"
-				&& (state.draggedItemData[state.draggedItemData.length-1].collectionIndex
-				== data.collectionIndex
-				&& state.draggedItemData[state.draggedItemData.length-1].path[0]
-				== data.path[0]);
 			const isTraySelfDrag = sourceCollectionKey == "tray" && data.collectionKey == "tray";
-			console.log("fate is")
-			console.log(sourceCollectionKey)
-			console.log(data.collectionKey)
 			const keysEqual = sourceCollectionKey == data.collectionKey
-			console.log(keysEqual)
-			console.log(state.draggedItemData[state.draggedItemData.length-1].collectionIndex)
-			console.log(data.collectionIndex)
 			const indicesEqual = state.draggedItemData[state.draggedItemData.length-1].collectionIndex == data.collectionIndex;
-			console.log(indicesEqual);
-			console.log(state.draggedItemData[state.draggedItemData.length-1].path[0])
-			console.log(data.path[0])
 			const pathsEqual = state.draggedItemData[state.draggedItemData.length-1].path[0] == data.path[0];
-			console.log(pathsEqual)
-			const _isNoChangeSongDrag = keysEqual && indicesEqual && pathsEqual;
-			console.log(_isNoChangeSongDrag);
-			if (!_isNoChangeSongDrag) {
+			const isNoChangeSongDrag = keysEqual && indicesEqual && pathsEqual;
+			if (!isNoChangeSongDrag) {
 				console.log("clearing dragged items")
 				state.draggedItemData = [];
-			} else {
-				console.log("what")
 			}
-			console.log(state.draggedItemData);
+
 			const newState = {};
 			newState[data.collectionKey] = [];
 			newState[sourceCollectionKey] = [];
