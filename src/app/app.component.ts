@@ -35,7 +35,7 @@ export class AppComponent {
 	private surfaceTiles: Tile[];
 	private trayClickStream = new Subject<[MouseEvent,number[]]>();
 	private gridClickStream = new Subject<[MouseEvent,number[]]>();
-	private tilesClickStream = new Subject<[MouseEvent,number[]]>();
+	private tilesClickStream = new Subject<[MouseEvent,number,string]>();
 	private trayItems: TrayItem[];
 	private mouseLocation = new Point(0,0);
 	private gridSize: Point;
@@ -82,7 +82,6 @@ export class AppComponent {
 		this.gridClickStream
 			.subscribe(([e,indexPath]: [MouseEvent,number[]]) => {
 				if (e.type == "mouseup") {
-					const nextCollectionId = this.store.select('tile').scan((acc: number,value: number) => acc + 1)
 					const gridDropInfo = new CollectionModficationData();
 					gridDropInfo.collectionKey = "tile";
 					gridDropInfo.collectionIndex = 0;
@@ -92,6 +91,18 @@ export class AppComponent {
 				}
 			});
 		this.gridService.layoutInfoStream
-			.subscribe(() => { this.store.dispatch(new app.NewLayout(this.gridService.cols*this.gridService.rows)) });
+			.subscribe(() => this.store.dispatch(new app.NewLayout(this.gridService.cols*this.gridService.rows)));
+		this.tilesClickStream
+			.subscribe(([e,indexPath,type]: [MouseEvent,number,string]) => {
+				const gridDragInfo = new CollectionModficationData();
+				gridDragInfo.collectionKey = "tile";
+				gridDragInfo.collectionIndex = 0;
+				gridDragInfo.path = [indexPath];
+				if (e.type == 'mousedown') {
+					this.store.dispatch(new app.DragAction(gridDragInfo))
+				} else {
+					// gridDragInfo.transformArguments = 
+				}
+			});
 	}
 }

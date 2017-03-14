@@ -6,12 +6,13 @@ import { Tile } from '../models/tile.model';
 import { Song } from '../models/song.model';
 import { TrayItem } from '../models/tray-item.model';
 import { State, initialState } from '../models/app.model';
-import { CollectionModificationData } from '../../../models/collection-modification-data.model';
+import { CollectionModficationData } from '../models/collection-modification-data.model';
 
 
 const allowedDragOperations = {
 	"tray": ["tray","tile"],
 	"song": ["song"],
+	"tile": ["tile"],
 };
 
 export function reducer(state = initialState, action: app.Actions): State {
@@ -68,31 +69,41 @@ export function reducer(state = initialState, action: app.Actions): State {
 		case app.ActionTypes.DRAG_COMPLETE: {
 			const data = <CollectionModficationData>action.payload
 
-			if (state.draggedItemData.length < 1) {
-				return state;
-			}
+			console.log("DRAG ENDED");
+			console.log(sourceCollectionKey+" -> "+data.collectionKey);
+			console.log("target path: "+data.path[0])
+			console.log("target args: ");
+			console.log(data.transformArguments);
+			console.log("source paths: ");
+			console.log(state.draggedItemData.map(x => x.path[0]));
 
-			console.log("decide to short circuit or not")
-			console.log(state.draggedItemData)
-			console.log(data)
-			console.log(state.draggedItemData.filter(item => item.collectionIndex == data.collectionIndex && item.collectionKey == data.collectionKey && item.path == data.path).length)
-			if (state.draggedItemData.filter(item => item.collectionIndex == data.collectionIndex && item.collectionKey == data.collectionKey && item.path[0] == data.path[0]).length > 0) {
+			if (state.draggedItemData.length < 1) {
+				console.log("ignoring drag completion because there are no dragged items")
 				return state;
 			}
 
 			const sourceCollectionKey = state.draggedItemData[0].collectionKey;
+
+			if (sourceCollectionKey == "tile" && data.collectionKey == "tile" && tileDragDoesNotChange(state.tile[0],state.draggedItemData,data.transformArguments)) {
+				console.log("ignoring drag completion because")
+				console.log("TILE drag op doesn't change anything")
+				return state;
+			}
+
+			if (state.draggedItemData.filter(item => item.collectionIndex == data.collectionIndex && item.collectionKey == data.collectionKey && item.path[0] == data.path[0]).length > 0) {
+				console.log("ignoring drag completion because")
+				console.log("drag op doesn't change anything")
+				return state;
+			}
+
 			if (!allowedDragOperations[sourceCollectionKey].includes(data.collectionKey)) {
+				console.log("ignoring drag completion because")
+				console.log(sourceCollectionKey+" cannot be dragged to "+data.collectionKey);
 				return Object.assign({}, state, {
 					draggedItemData: [],
 				});
 			}
 
-
-			console.log("DRAG ENDED");
-			console.log(sourceCollectionKey+" -> "+data.collectionKey);
-			console.log(data.path)
-			console.log(state.draggedItemData.map(x => x.path[0]));
-			
 			const oldDraggedItemData = state.draggedItemData;
 
 			const draggedItemsRaw = state.draggedItemData
@@ -194,6 +205,10 @@ function transform(sourceType: string, targetType: string, items: TrayItem[], ar
 		transformFn = (trayItem:TrayItem) => new Tile(args[0],args[1],1,1,trayItem.componentName,collectionIndices);
 	}
 	return items.map(transformFn);
+}
+
+function tileDragDoesNotChange(existingTiles: Tile[], draggedTileData: CollectionModficationData[], targetArgs: number[]): boolean {
+	return true;
 }
 
 Array.prototype.injectArray = function( idx, arr ) {

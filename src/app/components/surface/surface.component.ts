@@ -14,18 +14,18 @@ import { Tile } from '../../models/tile.model';
 })
 export class SurfaceComponent {
 
-	@Input() clickStream: Subject<[MouseEvent,number]>;
+	@Input() clickStream: Subject<[MouseEvent,number,string]>;
 	@Input() cellSize: Point;
 	@Input() items: Tile[];
 
 	constructor(private gridService:GridService) { }
 
-	onMouseUp(e: MouseEvent) {
-		this.clickStream.next([e,this.indexOf(e)]);
+	onMouseUp(e: MouseEvent, type: string) {
+		this.clickStream.next([e,this.indexOf(e),type]);
 	}
 
-	onMouseDown(e: MouseEvent) {
-		this.clickStream.next([e,this.indexOf(e)]);
+	onMouseDown(e: MouseEvent, type: string) {
+		this.clickStream.next([e,this.indexOf(e),type]);
 	}
 
 	addItemsAtIndex<T>(items: T[], index: number[]): void { }

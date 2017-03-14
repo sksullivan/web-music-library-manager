@@ -19,25 +19,17 @@ export class ResultsListComponent extends TileBase {
 	items = <Song[]>[];
 	highlightClass = <string[]>[];
 
-	constructor(protected store: Store<fromRoot.State>, private collectionIndices: number[]) {
+	constructor(protected store: Store<fromRoot.State>, protected collectionIndices: number[]) {
 		super(store,collectionIndices);
 		store.select('song').subscribe((newSongs: Song[][]) => {
-			console.log('klsdsd')
-			console.log(this.items)
 			this.items = newSongs[collectionIndices['song']];
-			console.log('klsdsd')
-			console.log(this.items)
 		});
 		store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[]) => {
-			console.log('kl')
-			console.log(this.items)
 			this.highlightClass = <string[]>Array(this.items.length);
 			draggedItemData
 				.filter(item => item.collectionKey == "song")
 				.filter(item => item.collectionIndex == this.collectionIndices['song'])
 				.map(item => this.highlightClass[item.path[0]] = "selected");
-			console.log("Updated highlights to")
-			console.log(this.highlightClass);
 		});
 	}
 
