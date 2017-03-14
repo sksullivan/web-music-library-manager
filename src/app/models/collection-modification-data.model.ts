@@ -2,7 +2,7 @@ export class CollectionModficationData {
 	collectionKey: string;
 	collectionIndex: number;
 
-	path?: number[];
+	path?: any[];
 
 	transformArguments?: any;
 }

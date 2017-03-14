@@ -36,7 +36,6 @@ export class TileComponent {
 	ngAfterContentInit() {
 		console.log("Injecting new widget...");
 		console.log(this.model.componentName);
-		console.log(typeof {})
 		const childComponent = this.children[this.model.componentName];
 		const componentFactory = this.compiler.resolveComponentFactory(childComponent);
 		const collectionIndicesProvider = <ValueProvider>{};

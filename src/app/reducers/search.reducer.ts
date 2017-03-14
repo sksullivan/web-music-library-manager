@@ -128,6 +128,9 @@ export function reducer(state = initialState, action: app.Actions): State {
 			const targetCollection = state[data.collectionKey][data.collectionIndex] || [];
 
 			if (sourceCollectionKey == "tile" && data.collectionKey == "tile") {
+				console.log("setting arg [2] from draggedData's last type")
+				data.transformArguments[2] = state.draggedItemData[0].transformArguments[0];
+				
 				console.log("replacing instead of inserting for tile self drag")
 				transform(sourceCollectionKey,data.collectionKey,draggedItems,data.transformArguments,undefined);
 				state[data.collectionKey][data.collectionIndex] = targetCollection;
@@ -206,14 +209,21 @@ export function reducer(state = initialState, action: app.Actions): State {
 	}
 }
 
-function transform(sourceType: string, targetType: string, items: TrayItem[], args: number[], collectionIndices: number[]): void[]|TrayItem[]  {
+function transform(sourceType: string, targetType: string, items: TrayItem[], args: any[], collectionIndices: number[]): void[]|TrayItem[]  {
 	let transformFn = (x: any) => x;
 	if (sourceType == "tray" && targetType == "tile") {
 		transformFn = (trayItem:TrayItem) => new Tile(args[0],args[1],1,1,trayItem.componentName,collectionIndices);
 	} else if (sourceType == "tile" && targetType == "tile") {
 		transformFn = (tile:Tile) => {
-			tile.origin.x = args[0];
-			tile.origin.y = args[1];
+			console.log("args")
+			console.log(args)
+			if (args[2] == "move") {
+				tile.origin.x = args[0];
+				tile.origin.y = args[1];
+			} else {
+				tile.relativeExtent.x = args[0]-tile.origin.x+1;
+				tile.relativeExtent.y = args[1]-tile.origin.y+1;
+			}
 			return tile;
 		};
 	}

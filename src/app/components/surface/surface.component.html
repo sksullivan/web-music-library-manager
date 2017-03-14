@@ -15,7 +15,7 @@
 			<span>
 				<i class="fa fa-times" aria-hidden="true" [attr.data-index]="i"></i>
 				<i class="fa fa-arrows" aria-hidden="true" [attr.data-index]="i" (mousedown)="onMouseDown($event,'move')"></i>
-				<i class="fa fa-expand" aria-hidden="true" [attr.data-index]="i"></i>
+				<i class="fa fa-expand" aria-hidden="true" [attr.data-index]="i" (mousedown)="onMouseDown($event,'resize')"></i>
 			</span>
 		</li>
 	</ul>

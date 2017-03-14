@@ -98,6 +98,7 @@ export class AppComponent {
 				gridDragInfo.collectionKey = "tile";
 				gridDragInfo.collectionIndex = 0;
 				gridDragInfo.path = [indexPath];
+				gridDragInfo.transformArguments = [type];
 				if (e.type == 'mousedown') {
 					this.store.dispatch(new app.DragAction(gridDragInfo))
 				} else {
