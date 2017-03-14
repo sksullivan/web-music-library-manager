@@ -9,8 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SearchFieldComponent {
 	@Input() searchStream: BehaviorSubject<string>;
-
-	private search: string;
+	@Input() search: string;
 
 	valueChanged(newValue: string) {
 		console.log("new search")

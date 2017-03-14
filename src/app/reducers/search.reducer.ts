@@ -90,7 +90,7 @@ export function reducer(state = initialState, action: app.Actions): State {
 				return state;
 			}
 
-			if (state.draggedItemData.filter(item => item.collectionIndex == data.collectionIndex && item.collectionKey == data.collectionKey && item.path[0] == data.path[0]).length > 0) {
+			if (!(sourceCollectionKey == "tile" && data.collectionKey == "tile") && state.draggedItemData.filter(item => item.collectionIndex == data.collectionIndex && item.collectionKey == data.collectionKey && item.path[0] == data.path[0]).length > 0) {
 				console.log("ignoring drag completion because")
 				console.log("drag op doesn't change anything")
 				return state;
@@ -127,11 +127,18 @@ export function reducer(state = initialState, action: app.Actions): State {
 
 			const targetCollection = state[data.collectionKey][data.collectionIndex] || [];
 
-			const newItemsArray = targetCollection
-				.injectArray(data.path,
-					transform(sourceCollectionKey,data.collectionKey,draggedItems,data.transformArguments,collectionIndices));
+			if (sourceCollectionKey == "tile" && data.collectionKey == "tile") {
+				console.log("replacing instead of inserting for tile self drag")
+				transform(sourceCollectionKey,data.collectionKey,draggedItems,data.transformArguments,undefined);
+				state[data.collectionKey][data.collectionIndex] = targetCollection;
+			} else {	
+				const newItemsArray = targetCollection
+					.injectArray(data.path,
+						transform(sourceCollectionKey,data.collectionKey,draggedItems,data.transformArguments,collectionIndices));
+				state[data.collectionKey][data.collectionIndex] = newItemsArray;
+			}
+			console.log(state)
 
-			state[data.collectionKey][data.collectionIndex] = newItemsArray;
 
 			if (sourceCollectionKey == "song") {
 				state.draggedItemData.map(itemData => {
@@ -203,19 +210,43 @@ function transform(sourceType: string, targetType: string, items: TrayItem[], ar
 	let transformFn = (x: any) => x;
 	if (sourceType == "tray" && targetType == "tile") {
 		transformFn = (trayItem:TrayItem) => new Tile(args[0],args[1],1,1,trayItem.componentName,collectionIndices);
+	} else if (sourceType == "tile" && targetType == "tile") {
+		transformFn = (tile:Tile) => {
+			tile.origin.x = args[0];
+			tile.origin.y = args[1];
+			return tile;
+		};
 	}
 	return items.map(transformFn);
 }
 
 function tileDragDoesNotChange(existingTiles: Tile[], draggedTileData: CollectionModficationData[], targetArgs: number[]): boolean {
-	return true;
+	const occupiedGrid = existingTiles
+		.map(tile => {
+			return [].range(tile.relativeExtent.x).map((xOffset: number) => {
+				return [].range(tile.relativeExtent.y).map((yOffset: number) => {
+					return [tile.origin.x+xOffset,tile.origin.y+yOffset];
+				});
+			});
+		});
+	console.log(occupiedGrid);
+	if (occupiedGrid.filter(occupiedCell => occupiedCell.x == targetArgs[0] && occupiedCell.y == targetArgs[1]).length > 0) {
+		console.log("ignoring because that cell is occupied")
+		return true;
+	}
+	console.log("target cell is clear")
+	return false;
 }
 
-Array.prototype.injectArray = function( idx, arr ) {
-    return this.slice( 0, idx ).concat( arr ).concat( this.slice( idx ) );
+Array.prototype.range = function(n): Number[] {
+	return Array.from(new Array(n),(x,i)=>i);
+}
+
+Array.prototype.injectArray = function(idx: number, arr: any[]) {
+    return this.slice(0,idx).concat(arr).concat(this.slice(idx));
 };
 
-Array.prototype.atIndexPath = function(path) {
+Array.prototype.atIndexPath = function(path: number[]) {
 	let segment = this;
 	for (let pathComponent of path) {
 		segment = segment[pathComponent];

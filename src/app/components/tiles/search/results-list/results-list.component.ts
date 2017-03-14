@@ -22,6 +22,8 @@ export class ResultsListComponent extends TileBase {
 	constructor(protected store: Store<fromRoot.State>, protected collectionIndices: number[]) {
 		super(store,collectionIndices);
 		store.select('song').subscribe((newSongs: Song[][]) => {
+			console.log("newSongs")
+			console.log(newSongs)
 			this.items = newSongs[collectionIndices['song']];
 		});
 		store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[]) => {
