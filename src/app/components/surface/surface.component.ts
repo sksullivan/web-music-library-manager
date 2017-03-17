@@ -16,12 +16,15 @@ export class SurfaceComponent {
 
 	@Input() clickStream: Subject<[MouseEvent,number,string]>;
 	@Input() cellSize: Point;
+	@Input() shouldReportMouseUps: boolean;
 	@Input() items: Tile[];
 
 	constructor(private gridService:GridService) { }
 
 	onMouseUp(e: MouseEvent, type: string) {
-		this.clickStream.next([e,this.indexOf(e),type]);
+		if (this.shouldReportMouseUps) {
+			this.clickStream.next([e,this.indexOf(e),type]);
+		}
 	}
 
 	onMouseDown(e: MouseEvent, type: string) {
