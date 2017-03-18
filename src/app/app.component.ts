@@ -68,6 +68,12 @@ export class AppComponent {
 		this.store.select('tile').subscribe((tile: Tile[][]) => this.surfaceTiles = tile[0]);
 		this.store.select('tray').subscribe((tray: TrayItem[][]) => this.trayItems = tray[0]);
 		this.store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[] ) => {
+			if (draggedItemData.length > 0 && draggedItemData[0].collectionKey == "tile") {
+				this.store.take(1).subscribe(state => {
+					this.proposedTile.origin = (<Tile>selectors.firstDraggedItem(state)).origin;
+				});
+			}
+			// this.proposedTile.origin.x = 
 			this.draggedItemCount = draggedItemData.length;
 			if (draggedItemData.length > 0) {
 				this.firstDraggedCollectionIndex = draggedItemData[0].path;
