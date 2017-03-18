@@ -13,7 +13,7 @@ li {
 	/*background-color: rgba;*/
 	border-radius: 10px;
 	/*border: 3px #a29c9b solid;*/
-	border: 3px rgba(0,0,0,0) solid;
+	/*border: 3px rgba(0,0,0,0) solid;*/
 	overflow-x: hidden;
 	overflow-y: hidden;
 }
@@ -26,6 +26,15 @@ li {
 .tile p {
 	color: #56494e;
 
+}
+
+.proposed-tile {
+	box-shadow: 0 2px 7px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.30);
+	pointer-events: none;
+	margin-bottom: 6px;
+	margin-right: 6px;
+
+	transition: all 0.1s ease-in-out;
 }
 
 span {

@@ -1,9 +1,7 @@
 <!-- <div *ngIf="shouldDisplay"> -->
 <div>
 	<ul>
-		<li class="tile" *ngIf="!shouldReportMouseUps"
-			[style.pointer-events]="'none'"
-			[style.opacity]="0.5"
+		<li class="tile proposed-tile" *ngIf="!shouldReportMouseUps"
 			[style.width.px]="proposedTile.relativeExtent.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
 			[style.height.px]="proposedTile.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
 			[style.left.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+proposedTile.origin.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)"
@@ -22,7 +20,6 @@
 				[style.width.px]="item.relativeExtent.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
 				[style.height.px]="item.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding">
 			</tile>
-			{{shouldReportMouseUps}}
 			<span>
 				<i class="fa fa-times" aria-hidden="true" [attr.data-index]="i"></i>
 				<i class="fa fa-arrows" aria-hidden="true" [attr.data-index]="i" (mousedown)="onMouseDown($event,'move')"></i>
