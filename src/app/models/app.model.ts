@@ -10,11 +10,11 @@ interface State {
 	searchQuery: string;
 	searchResults: YoutubeSearchResults;
 	loading: boolean;
-	grid: void[][];
-	tray: TrayItem[][];
-	tile: Tile[][];
-	song: void[][];
-	search: string[][];
+	grid: { [id: string]: void[] };
+	tray: { [id: string]: TrayItem[] };
+	tile: { [id: string]: Tile[] };
+	song: { [id: string]: void[] };
+	search: { [id: string]: string[] };
 	draggedItemData: CollectionModficationData[];
 };
 
@@ -23,20 +23,20 @@ const initialState: State = {
 	searchResults: new YoutubeSearchResults(),
 	loading: false,
 
-	grid: [[]],
-	tray: [
-		[
+	grid: { "base": [] },
+	tray: {
+		"base": [
 			new TrayItem("search","SearchComponent",["search","song"],"fa-search"),
 			new TrayItem("playback","PlaybackComponent",[],"fa-youtube-play"),
 			new TrayItem("decks","PlaybackComponent",[],"💿"),
 			new TrayItem("list","ResultsListComponent",["song"],"fa-list"),
 		],
-	],
-	tile: [[]],
-	song: [],
-	search: [[]],
+	},
+	tile: { "base": [] },
+	song: {},
+	search: {},
 
-	draggedItemData: []
+	draggedItemData: [],
 };
 
 const selectors = {
@@ -56,7 +56,7 @@ const selectors = {
 		return state.draggedItemData.length > 0
 			&& (state.draggedItemData[0].collectionKey == "tray"
 			|| state.draggedItemData[0].collectionKey == "tile");
-		};
+	},
 	firstDraggedItem: (state: State) => state[state.draggedItemData[0].collectionKey][state.draggedItemData[0].collectionIndex][state.draggedItemData[0].path],
 }
 

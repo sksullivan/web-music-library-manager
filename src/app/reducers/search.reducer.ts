@@ -26,7 +26,7 @@ export function reducer(state = initialState, action: app.Actions): State {
 			state['song'][data.collectionIndex] = data.transformArguments;
 
 			const newState = {};
-			newState['song'] = [].concat(state['song']);
+			newState['song'] = Object.assign({}, state['song']);
 			console.log("About to be new state is")
 			console.log(newState)
 
@@ -40,6 +40,18 @@ export function reducer(state = initialState, action: app.Actions): State {
 
 			return Object.assign({}, state, {
 				search: state['search'][data.collectionIndex]
+			});
+		}
+
+		case app.ActionTypes.RENAME_LIST: {
+			let newList = state['song'][action.payload];
+			if (!newList) {
+				newList = [];
+			}
+			state['song'][action.payload] = newList;
+
+			return Object.assign({}, state, {
+				song: state['song'],
 			});
 		}
 
@@ -84,7 +96,7 @@ export function reducer(state = initialState, action: app.Actions): State {
 			console.log("source paths: ");
 			console.log(state.draggedItemData.map(x => x.path[0]));
 
-			if (sourceCollectionKey == "tile" && data.collectionKey == "tile" && tileDragDoesNotChange(state.tile[0],state.draggedItemData,data.transformArguments)) {
+			if (sourceCollectionKey == "tile" && data.collectionKey == "tile" && tileDragDoesNotChange(state.tile["base"],state.draggedItemData,data.transformArguments)) {
 				console.log("ignoring drag completion because")
 				console.log("TILE drag op doesn't change anything")
 				return state;
@@ -105,10 +117,8 @@ export function reducer(state = initialState, action: app.Actions): State {
 			}
 
 			const oldDraggedItemData = state.draggedItemData;
-
 			const draggedItemsRaw = state.draggedItemData
 				.map(itemData => state[sourceCollectionKey][itemData.collectionIndex].atIndexPath(itemData.path));
-
 			const draggedItems = draggedItemsRaw.reduce((prev,curr) => {
 					prev.push(curr)
 					return prev
@@ -120,8 +130,8 @@ export function reducer(state = initialState, action: app.Actions): State {
 				draggedItems[0].requiredCollectionKeys.map((key: string) => {
 					console.log("creating")
 					console.log(key)
-					collectionIndices[key] = state[key].length;
-					state[key] = state[key].concat([[]]);
+					collectionIndices[key] = Object.keys(state[key]).length.toString();
+					state[key][collectionIndices[key]] = [];
 				});
 			}
 
@@ -175,10 +185,8 @@ export function reducer(state = initialState, action: app.Actions): State {
 			const newState = <State>{};
 
 			newState.draggedItemData = [].concat(state.draggedItemData);
-			newState[data.collectionKey] = [];
-			newState[sourceCollectionKey] = [];
-			newState[data.collectionKey] = [].concat(state[data.collectionKey]);
-			newState[sourceCollectionKey] = [].concat(state[sourceCollectionKey]);
+			newState[data.collectionKey] = Object.assign({}, state[data.collectionKey]);
+			newState[sourceCollectionKey] = Object.assign({}, state[sourceCollectionKey]);
 			console.log(newState)
 
 			return Object.assign({}, state, newState);
@@ -186,7 +194,7 @@ export function reducer(state = initialState, action: app.Actions): State {
 
 		case app.ActionTypes.NEW_LAYOUT: {
 			return Object.assign({}, state, {
-				grid: [<void[]>(new Array(action.payload))],
+				grid: { "base": <void[]>(new Array(action.payload)) },
 			});
 		}
 

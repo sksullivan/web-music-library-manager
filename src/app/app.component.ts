@@ -64,9 +64,9 @@ export class AppComponent {
 		this.store.select('searchResults').subscribe((results: YoutubeSearchResults) => this.searchResults = results);
 		this.store.select('loading').subscribe((loading: boolean) => this.loading = loading);
 		this.store.select('gridSize').subscribe((gridSize: Point) => this.gridSize = gridSize);
-		this.store.select('grid').subscribe((grid: void[][]) => this.gridTiles = grid[0]);
-		this.store.select('tile').subscribe((tile: Tile[][]) => this.surfaceTiles = tile[0]);
-		this.store.select('tray').subscribe((tray: TrayItem[][]) => this.trayItems = tray[0]);
+		this.store.select('grid').subscribe((grid: void[][]) => this.gridTiles = grid["base"]);
+		this.store.select('tile').subscribe((tile: Tile[][]) => this.surfaceTiles = tile["base"]);
+		this.store.select('tray').subscribe((tray: TrayItem[][]) => this.trayItems = tray["base"]);
 		this.store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[] ) => {
 			if (draggedItemData.length > 0 && draggedItemData[0].collectionKey == "tile") {
 				this.store.take(1).subscribe(state => {
@@ -76,7 +76,7 @@ export class AppComponent {
 			// this.proposedTile.origin.x = 
 			this.draggedItemCount = draggedItemData.length;
 			if (draggedItemData.length > 0) {
-				this.firstDraggedCollectionIndex = draggedItemData[0].path;
+				this.firstDraggedCollectionIndex = draggedItemData[0].path[0];
 			} else {
 				this.firstDraggedCollectionIndex = -1;
 			}
@@ -96,7 +96,7 @@ export class AppComponent {
 			.subscribe(([e,indexPath]: [MouseEvent,number[]]) => {
 				const trayDragInfo = new CollectionModficationData();
 				trayDragInfo.collectionKey = "tray";
-				trayDragInfo.collectionIndex = 0;
+				trayDragInfo.collectionIndex = "base";
 				trayDragInfo.path = indexPath;
 				if (e.type == "mousedown") {
 					this.store.dispatch(new app.DragAction(trayDragInfo));
@@ -107,7 +107,7 @@ export class AppComponent {
 				if (e.type == "mouseup") {
 					const gridDropInfo = new CollectionModficationData();
 					gridDropInfo.collectionKey = "tile";
-					gridDropInfo.collectionIndex = 0;
+					gridDropInfo.collectionIndex = "base";
 					gridDropInfo.path = [0];
 					gridDropInfo.transformArguments = indexPath;
 					this.store.dispatch(new app.DragCompleteAction(gridDropInfo));
@@ -119,7 +119,7 @@ export class AppComponent {
 			.subscribe(([e,indexPath,type]: [MouseEvent,number,string]) => {
 				const gridDragInfo = new CollectionModficationData();
 				gridDragInfo.collectionKey = "tile";
-				gridDragInfo.collectionIndex = 0;
+				gridDragInfo.collectionIndex = "base";
 				gridDragInfo.path = [indexPath];
 				gridDragInfo.transformArguments = [type];
 				if (e.type == 'mousedown') {

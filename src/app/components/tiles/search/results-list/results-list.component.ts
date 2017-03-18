@@ -16,16 +16,13 @@ import { CollectionModficationData } from '../../../../models/collection-modific
   styleUrls: ['./results-list.component.css']
 })
 export class ResultsListComponent extends TileBase {
-	items = <Song[]>[];
+	@Input() items = <Song[]>[];
+
 	highlightClass = <string[]>[];
 
-	constructor(protected store: Store<fromRoot.State>, protected collectionIndices: number[]) {
+	constructor(protected store: Store<fromRoot.State>, protected collectionIndices: string[]) {
 		super(store,collectionIndices);
-		store.select('song').subscribe((newSongs: Song[][]) => {
-			console.log("newSongs")
-			console.log(newSongs)
-			this.items = newSongs[collectionIndices['song']];
-		});
+		
 		store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[]) => {
 			this.highlightClass = <string[]>Array(this.items.length);
 			draggedItemData

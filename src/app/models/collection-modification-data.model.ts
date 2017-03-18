@@ -1,6 +1,6 @@
 export class CollectionModficationData {
 	collectionKey: string;
-	collectionIndex: number;
+	collectionIndex: string;
 
 	path?: any[];
 

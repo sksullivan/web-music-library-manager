@@ -25,30 +25,46 @@ export class SearchComponent extends TileBase {
 
 	private songs: Song[];
 
-	constructor(protected store: Store<fromRoot.State>, private videoService: VideoService, protected collectionIndices: number[]) {
+	constructor(protected store: Store<fromRoot.State>, private videoService: VideoService, protected collectionIndices: string[]) {
 		super(store,collectionIndices);
 		this.searchStream
 			.debounceTime(40)
 			.filter(search => search.length > 1)
 			.subscribe((search: string) => {
-				const searchData = new CollectionModficationData();
-				searchData.collectionKey = "search";
-				searchData.collectionIndex = this.collectionIndices["search"];
-				searchData.transformArguments = search;
-				this.store.dispatch(new app.SearchAction(searchData))
-				this.videoService.fetchVideos(search)
-					.subscribe(searchResults => {
-						const resultsData = new CollectionModficationData();
-						resultsData.collectionKey = "song";
-						resultsData.collectionIndex = this.collectionIndices["song"];
-						resultsData.transformArguments = searchResults.items.map((result: any) => new Song(result.etag,result.id.videoId,result.snippet.title));
-						this.store.dispatch(new app.SearchCompleteAction(resultsData))
+				if (search.startsWith(':')) {
+
+					const searchIdentifier = search.slice(1);
+					this.collectionIndices['song'] = searchIdentifier;
+					store.dispatch(new app.RenameListAction(searchIdentifier));
+
+					store.select('song').take(1).subscribe((newSongs: Song[][]) => {
+						console.log("newSongs")
+						console.log(newSongs[this.collectionIndices['song']])
+						this.songs = newSongs[this.collectionIndices['song']];
 					});
+
+				} else {
+
+					const searchData = new CollectionModficationData();
+					searchData.collectionKey = "search";
+					searchData.collectionIndex = this.collectionIndices["search"];
+					searchData.transformArguments = search;
+					this.store.dispatch(new app.SearchAction(searchData))
+					this.videoService.fetchVideos(search)
+						.subscribe(searchResults => {
+							const resultsData = new CollectionModficationData();
+							resultsData.collectionKey = "song";
+							resultsData.collectionIndex = this.collectionIndices["song"];
+							resultsData.transformArguments = searchResults.items.map((result: any) => new Song(result.etag,result.id.videoId,result.snippet.title));
+							this.store.dispatch(new app.SearchCompleteAction(resultsData))
+						});
+				}
 			});
 		this.searchStream
 			.delay(300)
 				.subscribe(search => {
 					if (search == "") {
+						// alert('clearing')
 						const searchEndedData = new CollectionModficationData();
 						searchEndedData.collectionKey = "search";
 						searchEndedData.collectionIndex = this.collectionIndices["search"];
@@ -56,5 +72,10 @@ export class SearchComponent extends TileBase {
 						this.store.dispatch(new app.SearchCompleteAction(searchEndedData));
 					}
 				});
+		store.select('song').subscribe((newSongs: Song[][]) => {
+			console.log("newSongs")
+			console.log(newSongs[this.collectionIndices['song']])
+			this.songs = newSongs[this.collectionIndices['song']];
+		});
 	}
 }

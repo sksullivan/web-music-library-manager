@@ -10,8 +10,7 @@ export const ActionTypes = {
   SEARCH_COMPLETE:              'Search Complete',
   DRAG:                         'Drag',
   DRAG_COMPLETE:                'Drag Complete',
-  RESIZE_SURFACE_ITEM:          'Resize Surface Item',
-  RESIZE_SURFACE_ITEM_COMPLETE: 'Resize Surface Item Complete',
+  RENAME_LIST:                  'Rename List',
   NEW_LAYOUT:                   'New Layout',
 };
 
@@ -39,16 +38,10 @@ export class DragCompleteAction implements Action {
   constructor(public payload: CollectionModficationData) { }
 }
 
-export class ResizeSurfaceItemAction implements Action {
-  type = ActionTypes.RESIZE_SURFACE_ITEM;
+export class RenameListAction implements Action {
+  type = ActionTypes.RENAME_LIST;
 
-  constructor() { }
-}
-
-export class ResizeSurfaceItemCompleteAction implements Action {
-  type = ActionTypes.RESIZE_SURFACE_ITEM_COMPLETE;
-
-  constructor(public payload: any) { }
+  constructor(public payload: string) { }
 }
 
 export class NewLayout implements Action {
@@ -62,6 +55,5 @@ export type Actions
   | SearchCompleteAction
   | DragAction
   | DragCompleteAction
-  | ResizeSurfaceItemAction
-  | ResizeSurfaceItemCompleteAction
+  | RenameListAction
   | NewLayout
