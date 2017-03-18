@@ -206,8 +206,8 @@ function transform(sourceType: string, targetType: string, items: TrayItem[], ar
 			console.log("args")
 			console.log(args)
 			if (args[2] == "move") {
-				tile.origin.x = args[0];
-				tile.origin.y = args[1];
+				tile.origin.x = args[0]-tile.relativeExtent.x+1;
+				tile.origin.y = args[1]-tile.relativeExtent.y+1;
 			} else {
 				tile.relativeExtent.x = args[0]-tile.origin.x+1;
 				tile.relativeExtent.y = args[1]-tile.origin.y+1;

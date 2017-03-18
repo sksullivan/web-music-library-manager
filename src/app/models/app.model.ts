@@ -52,7 +52,11 @@ const selectors = {
 			&& state.draggedItemData[0].transformArguments.length > 0
 			&& state.draggedItemData[0].transformArguments[0] == "resize"
 	},
-	isDraggingFromTray: (state: State) => state.draggedItemData.length > 0 && state.draggedItemData[0].collectionKey == "tray",
+	isDraggingGridItem: (state: State) => {
+		return state.draggedItemData.length > 0
+			&& (state.draggedItemData[0].collectionKey == "tray"
+			|| state.draggedItemData[0].collectionKey == "tile");
+		};
 	firstDraggedItem: (state: State) => state[state.draggedItemData[0].collectionKey][state.draggedItemData[0].collectionIndex][state.draggedItemData[0].path],
 }
 

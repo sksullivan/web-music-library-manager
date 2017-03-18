@@ -40,12 +40,13 @@ export class AppComponent {
 	private trayItems: TrayItem[];
 	private mouseLocation = new Point(0,0);
 	private gridSize: Point;
-	private draggingFromTray: boolean = false;
+	private shouldDisplayGrid: boolean = true;
 	private resizingOrMovingTile: boolean = false;
 	private draggedItemCount = 0;
 	private firstDraggedCollectionIndex: number;
 	private proposedTile = new Tile(0,0,1,1,'',[]);
 	private gridHoverStream = new Subject<[MouseEvent,number[]]>();
+	private firstRun = true;
 
 	constructor(
 		private videoService: VideoService,
@@ -68,7 +69,6 @@ export class AppComponent {
 		this.store.select('tray').subscribe((tray: TrayItem[][]) => this.trayItems = tray[0]);
 		this.store.select('draggedItemData').subscribe((draggedItemData: CollectionModficationData[] ) => {
 			this.draggedItemCount = draggedItemData.length;
-			console.log('set draggedItemCollectionIndex')
 			if (draggedItemData.length > 0) {
 				this.firstDraggedCollectionIndex = draggedItemData[0].path;
 			} else {
@@ -78,7 +78,8 @@ export class AppComponent {
 			console.log("Now have "+draggedItemData.length+" dragged items.");
 			console.log("dragged collection index is: "+this.firstDraggedCollectionIndex)
 			this.store.take(1).subscribe(state => {
-				this.draggingFromTray = selectors.isDraggingFromTray(state);
+				this.shouldDisplayGrid = this.firstRun || selectors.isDraggingGridItem(state);
+				this.firstRun = false;
 				this.resizingOrMovingTile = selectors.isDraggingTile(state) || selectors.isResizingTile(state);
 			});
 		});
@@ -126,18 +127,18 @@ export class AppComponent {
 				this.store.take(1).subscribe((state: State) => {
 					const existingTile = <Tile>selectors.firstDraggedItem(state);
 
-					if (state.draggedItemData[0].transformArguments[0] == 'resize') {
-						this.proposedTile.origin.x = existingTile.origin.x;
-						this.proposedTile.origin.y = existingTile.origin.y;
-
-						this.proposedTile.relativeExtent.x = indexPath[0] - existingTile.origin.x + 1;
-						this.proposedTile.relativeExtent.y = indexPath[1] - existingTile.origin.y + 1; 
-					} else {
+					if (state.draggedItemData[0].transformArguments[0] == 'move') {
 						this.proposedTile.origin.x = indexPath[0] - existingTile.relativeExtent.x + 1;
 						this.proposedTile.origin.y = indexPath[1] - existingTile.relativeExtent.y + 1;
 
 						this.proposedTile.relativeExtent.x = existingTile.relativeExtent.x;
 						this.proposedTile.relativeExtent.y = existingTile.relativeExtent.y; 
+					} else {
+						this.proposedTile.origin.x = existingTile.origin.x;
+						this.proposedTile.origin.y = existingTile.origin.y;
+
+						this.proposedTile.relativeExtent.x = indexPath[0] - existingTile.origin.x + 1;
+						this.proposedTile.relativeExtent.y = indexPath[1] - existingTile.origin.y + 1; 
 					}
 				});
 			}
