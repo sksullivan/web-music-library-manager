@@ -45,6 +45,7 @@ import { GridService } from '../../services/grid.service';
 export class GridComponent {
 
 	@Input() clickStream: Subject<[MouseEvent,number[]]>;
+	@Input() hoverStream: Subject<[MouseEvent,number[]]>;
 	@Input() cellSize: Point;
 	@Input() shouldDisplay: boolean;
 	@Input() items: void[];
@@ -58,7 +59,12 @@ export class GridComponent {
 
 	onMouseDown(e: MouseEvent) {
 		const linearIndex = this.indexOf(e);
-		this.clickStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]]);
+		this.hoverStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]]);
+	}
+
+	onMouseOver(e: MouseEvent) {
+		const linearIndex = this.indexOf(e);
+		this.hoverStream.next([e,[linearIndex%this.gridService.cols,Math.floor(linearIndex/this.gridService.cols)]]);
 	}
 
 	addItemsAtIndex<T>(items: T[], index: number[]): void{}

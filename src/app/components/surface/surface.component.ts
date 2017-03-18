@@ -15,15 +15,18 @@ import { Tile } from '../../models/tile.model';
 export class SurfaceComponent {
 
 	@Input() clickStream: Subject<[MouseEvent,number,string]>;
-	@Input() cellSize: Point;
-	@Input() shouldReportMouseUps: boolean;
+	@Input() shouldReportMouseUps = true;
+	@Input() draggedCollectionIndex: number;
 	@Input() items: Tile[];
+	@Input() proposedTile: Tile;
 
 	constructor(private gridService:GridService) { }
 
 	onMouseUp(e: MouseEvent, type: string) {
+		console.log("should we report this mouseup?")
+		console.log(this.shouldReportMouseUps)
 		if (this.shouldReportMouseUps) {
-			this.clickStream.next([e,this.indexOf(e),type]);
+			//this.clickStream.next([e,this.indexOf(e),type]);
 		}
 	}
 

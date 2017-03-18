@@ -1,4 +1,4 @@
-{{ draggedItems }}
+
 <main>
 	<div class="row">
 		<div class="col-md-12">
@@ -6,13 +6,15 @@
 				[clickStream]="gridClickStream"
 				[items]="gridTiles"
 				[cellSize]="gridSize"
-				[shouldDisplay]="draggingFromTray">
+				[shouldDisplay]="draggingFromTray"
+				[hoverStream]="gridHoverStream">
 			</grid>
 			<surface
 				[clickStream]="tilesClickStream"
 				[items]="surfaceTiles"
-				[cellSize]="gridSize"
-				[shouldReportMouseUps]="resizing">
+				[shouldReportMouseUps]="!resizingOrMovingTile"
+				[draggedCollectionIndex]="firstDraggedCollectionIndex"
+				[proposedTile]="proposedTile">
 			</surface>
 			<!-- <search [valueStream]="searchStream"></search>
 			<results-list [loading]="loading" [results]="searchResults"></results-list> -->

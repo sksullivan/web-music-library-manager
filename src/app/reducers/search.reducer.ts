@@ -69,6 +69,13 @@ export function reducer(state = initialState, action: app.Actions): State {
 		case app.ActionTypes.DRAG_COMPLETE: {
 			const data = <CollectionModficationData>action.payload
 
+			if (state.draggedItemData.length < 1) {
+				console.log("ignoring drag completion because there are no dragged items")
+				return state;
+			}
+
+			const sourceCollectionKey = state.draggedItemData[0].collectionKey;
+
 			console.log("DRAG ENDED");
 			console.log(sourceCollectionKey+" -> "+data.collectionKey);
 			console.log("target path: "+data.path[0])
@@ -76,13 +83,6 @@ export function reducer(state = initialState, action: app.Actions): State {
 			console.log(data.transformArguments);
 			console.log("source paths: ");
 			console.log(state.draggedItemData.map(x => x.path[0]));
-
-			if (state.draggedItemData.length < 1) {
-				console.log("ignoring drag completion because there are no dragged items")
-				return state;
-			}
-
-			const sourceCollectionKey = state.draggedItemData[0].collectionKey;
 
 			if (sourceCollectionKey == "tile" && data.collectionKey == "tile" && tileDragDoesNotChange(state.tile[0],state.draggedItemData,data.transformArguments)) {
 				console.log("ignoring drag completion because")
@@ -184,19 +184,6 @@ export function reducer(state = initialState, action: app.Actions): State {
 			return Object.assign({}, state, newState);
 		}
 
-		case app.ActionTypes.RESIZE_SURFACE_ITEM: {
-			return Object.assign({}, state, {
-				resizingTrayItem: action.payload,
-			});
-		}
-
-		case app.ActionTypes.RESIZE_SURFACE_ITEM_COMPLETE: {
-			return Object.assign({}, state, {
-				resizingTrayItem: undefined,
-				surfaceLayout: action.payload,
-			});
-		}
-
 		case app.ActionTypes.NEW_LAYOUT: {
 			return Object.assign({}, state, {
 				grid: [<void[]>(new Array(action.payload))],
@@ -204,6 +191,7 @@ export function reducer(state = initialState, action: app.Actions): State {
 		}
 
 		default: {
+			console.log("UNRECOGNIZED ACTION SENT TO STORE")
 			return state;
 		}
 	}

@@ -36,10 +36,28 @@ const initialState: State = {
 	song: [],
 	search: [[]],
 
-	draggedItemData: [],
+	draggedItemData: []
 };
+
+const selectors = {
+	isDraggingTile: (state: State) => {
+		return state.draggedItemData.length > 0
+			&& state.draggedItemData[0].transformArguments !== undefined
+			&& state.draggedItemData[0].transformArguments.length > 0
+			&& state.draggedItemData[0].transformArguments[0] == "move"
+	},
+	isResizingTile: (state: State) => {
+		return state.draggedItemData.length > 0
+			&& state.draggedItemData[0].transformArguments !== undefined
+			&& state.draggedItemData[0].transformArguments.length > 0
+			&& state.draggedItemData[0].transformArguments[0] == "resize"
+	},
+	isDraggingFromTray: (state: State) => state.draggedItemData.length > 0 && state.draggedItemData[0].collectionKey == "tray",
+	firstDraggedItem: (state: State) => state[state.draggedItemData[0].collectionKey][state.draggedItemData[0].collectionIndex][state.draggedItemData[0].path],
+}
 
 export {
 	State,
 	initialState,
+	selectors
 }

@@ -1,8 +1,18 @@
 <!-- <div *ngIf="shouldDisplay"> -->
 <div>
 	<ul>
+		<li class="tile" *ngIf="!shouldReportMouseUps"
+			[style.pointer-events]="'none'"
+			[style.opacity]="0.5"
+			[style.width.px]="proposedTile.relativeExtent.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
+			[style.height.px]="proposedTile.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
+			[style.left.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+proposedTile.origin.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)"
+			[style.top.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+proposedTile.origin.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)">
+		</li>
 		<li class="tile" *ngFor="let item of items; let i = index"
 			[attr.data-index]="i"
+			[style.opacity]="(!shouldReportMouseUps && draggedCollectionIndex == i) ? 0.0 : 1.0"
+			[style.pointer-events]="shouldReportMouseUps ? 'all' : 'none'"
 			[style.width.px]="item.relativeExtent.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
 			[style.height.px]="item.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
 			[style.left.px]="this.gridService.cellPadding-this.gridService.cellBorderWidth+item.origin.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)"
@@ -12,6 +22,7 @@
 				[style.width.px]="item.relativeExtent.x*(this.gridService.cellWidth+2*this.gridService.cellPadding)-2*this.gridService.cellPadding"
 				[style.height.px]="item.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding">
 			</tile>
+			{{shouldReportMouseUps}}
 			<span>
 				<i class="fa fa-times" aria-hidden="true" [attr.data-index]="i"></i>
 				<i class="fa fa-arrows" aria-hidden="true" [attr.data-index]="i" (mousedown)="onMouseDown($event,'move')"></i>
