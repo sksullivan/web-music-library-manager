@@ -21,7 +21,7 @@
 				[style.height.px]="item.relativeExtent.y*(this.gridService.cellHeight+2*this.gridService.cellPadding)-2*this.gridService.cellPadding">
 			</tile>
 			<span>
-				<i class="fa fa-times" aria-hidden="true" [attr.data-index]="i"></i>
+				<i class="fa fa-times" aria-hidden="true" [attr.data-index]="i" (mousedown)="onMouseDown($event,'delete')"></i>
 				<i class="fa fa-arrows" aria-hidden="true" [attr.data-index]="i" (mousedown)="onMouseDown($event,'move')"></i>
 				<i class="fa fa-expand" aria-hidden="true" [attr.data-index]="i" (mousedown)="onMouseDown($event,'resize')"></i>
 			</span>

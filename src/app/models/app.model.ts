@@ -28,7 +28,8 @@ const initialState: State = {
 		"base": [
 			new TrayItem("search","SearchComponent",["search","song"],"fa-search"),
 			new TrayItem("playback","PlaybackComponent",[],"fa-youtube-play"),
-			new TrayItem("decks","PlaybackComponent",[],"💿"),
+			new TrayItem("decks","PlaybackComponent",[],"fa-dot-circle-o"),
+			// new TrayItem("decks","PlaybackComponent",[],"💿"),
 			new TrayItem("list","ResultsListComponent",["song"],"fa-list"),
 		],
 	},

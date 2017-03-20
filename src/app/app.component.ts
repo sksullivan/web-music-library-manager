@@ -123,7 +123,11 @@ export class AppComponent {
 				gridDragInfo.path = [indexPath];
 				gridDragInfo.transformArguments = [type];
 				if (e.type == 'mousedown') {
-					this.store.dispatch(new app.DragAction(gridDragInfo));
+					if (type == 'delete') {
+						this.store.dispatch(new app.DeleteList(indexPath));
+					} else {						
+						this.store.dispatch(new app.DragAction(gridDragInfo));
+					}
 				} else {
 					// gridDragInfo.transformArguments = 
 				}
@@ -139,7 +143,7 @@ export class AppComponent {
 
 						this.proposedTile.relativeExtent.x = existingTile.relativeExtent.x;
 						this.proposedTile.relativeExtent.y = existingTile.relativeExtent.y; 
-					} else {
+					} else if (state.draggedItemData[0].transformArguments[0] == 'resize') {
 						this.proposedTile.origin.x = existingTile.origin.x;
 						this.proposedTile.origin.y = existingTile.origin.y;
 

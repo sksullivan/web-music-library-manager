@@ -55,6 +55,16 @@ export function reducer(state = initialState, action: app.Actions): State {
 			});
 		}
 
+		case app.ActionTypes.DELETE_LIST: {
+			console.log("DELETING LIST")
+			console.log(action.payload)
+			state['tile']['base'].splice(action.payload,1);
+
+			return Object.assign({}, state, {
+				tile: state['tile'],
+			});
+		}
+
 		case app.ActionTypes.DRAG: {
 			const data = <CollectionModficationData>action.payload;
 
@@ -117,12 +127,8 @@ export function reducer(state = initialState, action: app.Actions): State {
 			}
 
 			const oldDraggedItemData = state.draggedItemData;
-			const draggedItemsRaw = state.draggedItemData
+			const draggedItems = state.draggedItemData
 				.map(itemData => state[sourceCollectionKey][itemData.collectionIndex].atIndexPath(itemData.path));
-			const draggedItems = draggedItemsRaw.reduce((prev,curr) => {
-					prev.push(curr)
-					return prev
-				},[])
 
 			const collectionIndices = <number[]>{};
 			if (sourceCollectionKey == "tray") {

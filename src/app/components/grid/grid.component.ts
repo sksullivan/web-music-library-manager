@@ -42,7 +42,7 @@ import { GridService } from '../../services/grid.service';
 			transition('false => true', animate('700ms ease-in-out')),
 			transition('true => false', animate('700ms ease-in-out'))
 		]),
-	]
+	],
 })
 export class GridComponent {
 

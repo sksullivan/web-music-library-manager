@@ -11,6 +11,7 @@ export const ActionTypes = {
   DRAG:                         'Drag',
   DRAG_COMPLETE:                'Drag Complete',
   RENAME_LIST:                  'Rename List',
+  DELETE_LIST:                  'Delete List',
   NEW_LAYOUT:                   'New Layout',
 };
 
@@ -42,6 +43,12 @@ export class RenameListAction implements Action {
   type = ActionTypes.RENAME_LIST;
 
   constructor(public payload: string) { }
+}
+
+export class DeleteList implements Action {
+  type = ActionTypes.DELETE_LIST;
+
+  constructor(public payload: number) { }
 }
 
 export class NewLayout implements Action {
