@@ -71,9 +71,10 @@ export class AppComponent {
 			if (draggedItemData.length > 0 && draggedItemData[0].collectionKey == "tile") {
 				this.store.take(1).subscribe(state => {
 					this.proposedTile.origin = (<Tile>selectors.firstDraggedItem(state)).origin;
+					this.proposedTile.relativeExtent = (<Tile>selectors.firstDraggedItem(state)).relativeExtent;
 				});
 			}
-			// this.proposedTile.origin.x = 
+
 			this.draggedItemCount = draggedItemData.length;
 			if (draggedItemData.length > 0) {
 				this.firstDraggedCollectionIndex = draggedItemData[0].path[0];
